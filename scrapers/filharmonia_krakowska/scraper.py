@@ -4,12 +4,16 @@ from datetime import datetime
 import time
 from random import SystemRandom
 import logging
-import csv
 import re
 import copy
+import psycopg2
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
+from config import load_config
 
 BASE_URL = "https://filharmoniakrakow.pl/public/program"
-OUTPUT_FILENAME = "filharmonia_krakowska.csv"
 LOG_FILENAME = "filharmonia_krakowska.log"
 
 logging.basicConfig(
@@ -68,6 +72,9 @@ class FilharmoniaKrakowskaScraper:
             "Accept-Encoding": "gzip, deflate, br, zstd",
         }
         self.concert_list = []
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        config_path = os.path.join(script_dir, "../database.ini")
+        self.db_config = load_config(config_path)
 
     def get_page_count(self):
         """Get total number of pages with concert listings"""
@@ -122,7 +129,7 @@ class FilharmoniaKrakowskaScraper:
         try:
             date, hour = date_time.split(",")
             date = date.strip()
-            hour = hour.strip()
+            hour = hour.split()[-1].strip()
         except ValueError:
             logger.warning(f"Invalid date/time format: '{date_time}'")
             date, hour = "Unknown date", "Unknown time"
@@ -145,19 +152,12 @@ class FilharmoniaKrakowskaScraper:
 
         if not details_href:
             logger.warning(f"Missing details link for concert: {concert_title}")
-            return {
-                "date": f"{date};{hour}",
-                "title": concert_title,
-                "concert_type": "Unknown",
-                "composers": [],
-                "programme": [],
-                "venue": "Unknown",
-                "source": "Filharmonia Krakowska",
-                "details_link": "",
-                "scraped_at": datetime.now().strftime("%Y-%m-%d;%H:%M:%S"),
-            }
+            return None
 
         details_link = f"https://filharmoniakrakow.pl{details_href}"
+
+        if self.check_if_concert_exists(details_link):
+            return None
 
         # Get concert details
         try:
@@ -194,7 +194,7 @@ class FilharmoniaKrakowskaScraper:
             )
 
             return {
-                "date": f"{date};{hour}",
+                "date": f"{date} {hour}",
                 "title": concert_title,
                 "concert_type": concert_type,
                 "composers": composers,
@@ -202,7 +202,6 @@ class FilharmoniaKrakowskaScraper:
                 "venue": venue,
                 "source": "Filharmonia Krakowska",
                 "details_link": details_link,
-                "scraped_at": datetime.now().strftime("%Y-%m-%d;%H:%M:%S"),
             }
 
         except requests.exceptions.RequestException as e:
@@ -270,58 +269,109 @@ class FilharmoniaKrakowskaScraper:
                 if concert_data:
                     self.concert_list.append(concert_data)
 
-            time.sleep(cryptogen.uniform(1, 3))
+            time.sleep(cryptogen.uniform(0.5, 2))
 
         logger.info(f"Scraping complete. Found {len(self.concert_list)} concerts.")
         return self.concert_list
 
-    def save_to_csv(self, filename):
-        """Save scraped concerts to CSV file"""
+    def check_if_concert_exists(self, details_link):
+        """Check if concert already exists in database"""
+        check_query = """
+            SELECT EXISTS(SELECT 1
+            FROM concerts
+            WHERE details_link = %s) \
+        """
+
         try:
-            with open(filename, "w", newline="", encoding="utf-8") as csvfile:
-                fieldnames = [
-                    "date",
-                    "title",
-                    "concert_type",
-                    "composers",
-                    "programme",
-                    "venue",
-                    "source",
-                    "details_link",
-                    "scraped_at",
-                ]
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                writer.writeheader()
+            with psycopg2.connect(**self.db_config) as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(check_query, (details_link,))
+                    exists = cursor.fetchone()[0]
+                    return exists
 
-                for concert in self.concert_list:
-                    concert_copy = concert.copy()
-                    if isinstance(concert_copy["programme"], list):
-                        concert_copy["programme"] = "|".join(concert_copy["programme"])
-                    writer.writerow(concert_copy)
-
-            logger.info(
-                f"Successfully saved {len(self.concert_list)} concerts to {filename}"
-            )
+        except (psycopg2.DatabaseError, Exception) as e:
+            logger.error("Error checking if concert %s exists: %s", details_link, e)
             return True
 
-        except Exception as e:
-            logger.error(f"Error saving to CSV: {str(e)}")
+    def create_table(self):
+        """Create concerts table if it doesn't exist"""
+        create_table_query = """
+            CREATE TABLE IF NOT EXISTS concerts (
+            id SERIAL PRIMARY KEY,
+            date TIMESTAMP,
+            title VARCHAR(300),
+            concert_type VARCHAR(200),
+            composers VARCHAR(200)[],
+            programme VARCHAR(400)[],
+            venue VARCHAR(200),
+            source VARCHAR(200),
+            details_link VARCHAR(500),
+            modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        """
+
+        try:
+            with psycopg2.connect(**self.db_config) as conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(create_table_query)
+                    conn.commit()
+        except (psycopg2.DatabaseError, Exception) as e:
+            logger.error("Error creating table: %s", e)
+            raise
+
+    def save_to_database(self):
+        """Save scraped concerts to PostgreSQL database"""
+        if not self.concert_list:
+            logger.warning("No concerts to save to database")
+            return False
+
+        insert_query = """INSERT INTO concerts (date, title, concert_type, composers, programme, venue, source, details_link)
+                          VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
+
+        try:
+            with psycopg2.connect(**self.db_config) as conn:
+                with conn.cursor() as cursor:
+                    for concert in self.concert_list:
+                        # Parse date and add Polish timezone offset
+                        date = datetime.strptime(concert["date"], "%d-%m-%Y %H:%M")
+
+                        cursor.execute(
+                            insert_query,
+                            (
+                                date,
+                                concert["title"],
+                                concert["concert_type"],
+                                concert["composers"],
+                                concert["programme"],
+                                concert["venue"],
+                                concert["source"],
+                                concert["details_link"],
+                            ),
+                        )
+
+                    conn.commit()
+                    logger.info(
+                        "Successfully saved %d concerts", len(self.concert_list)
+                    )
+                    return True
+        except (psycopg2.DatabaseError, Exception) as e:
+            logger.error("Error saving to database: %s", e)
             return False
 
 
 def main():
-    date_from = "2025-07-01"
-    date_to = "2025-11-10"
+    # date_from = "2025-07-01"
+    # date_to = "2025-07-10"
 
-    # date_now = datetime.today()
-    # date_from = date_now.strftime("%Y-%m-%d")
-    # date_to = date_now.replace(year=date_now.year + 1).strftime("%Y-%m-%d")
+    date_now = datetime.today()
+    date_from = date_now.strftime("%Y-%m-%d")
+    date_to = date_now.replace(year=date_now.year + 1).strftime("%Y-%m-%d")
 
     scraper = FilharmoniaKrakowskaScraper(date_from, date_to)
+    scraper.create_table()
     scraper.scrape()
-    scraper.save_to_csv(OUTPUT_FILENAME)
-
-    logger.info(f"Saved {len(scraper.concert_list)} concerts")
+    scraper.save_to_database()
 
 
 if __name__ == "__main__":
