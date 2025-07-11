@@ -1,12 +1,16 @@
 from configparser import ConfigParser
+import os
 
 
 # source: https://neon.com/postgresql/postgresql-python/connect
 def load_config(filename="database.ini", section="postgresql"):
     parser = ConfigParser()
-    parser.read(filename)
 
-    # get section, default to postgresql
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(current_dir, filename)
+
+    parser.read(config_path)
+
     config = {}
     if parser.has_section(section):
         params = parser.items(section)
