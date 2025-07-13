@@ -23,19 +23,14 @@ class KrakowPhilharmonicScraper(Scraper):
             "Accept-Encoding": "gzip, deflate, br, zstd",
         }
 
-    def create_concert(self):
+    def _create_concert(self):
         return KrakowPhilharmonicConcert()
 
-    def get_individual_concerts_html(self):
-        concerts_html = []
-
+    def _get_individual_concerts_html(self):
         try:
-            pages = self.get_page_count()
+            pages = self._get_page_count()
             for p in range(1, pages + 1):
-                if p == 1:
-                    url = f"https://filharmoniakrakow.pl/public/program/?keyword=&fDateFrom={self.date_from}&fDateTo={self.date_to}"
-                else:
-                    url = f"https://filharmoniakrakow.pl/public/program/{p}?type=pagination&keyword=&fType=&fPerformer=&fComposer=&fInstruments=&fDateFrom={self.date_from}&fDateTo={self.date_to}&fSubscriptions="
+                url = f"https://filharmoniakrakow.pl/public/program/{p}?type=pagination&keyword=&fType=&fPerformer=&fComposer=&fInstruments=&fDateFrom={self.date_from}&fDateTo={self.date_to}&fSubscriptions="
 
                 response = requests.get(
                     url=url,
@@ -47,15 +42,14 @@ class KrakowPhilharmonicScraper(Scraper):
                 soup = BeautifulSoup(response.text, "lxml")
                 concerts = soup.select(".repRow.block-item")
 
-                concerts_html.extend(concerts)
-
-            return concerts_html
+                for c in concerts:
+                    yield c
 
         except requests.exceptions.RequestException as e:
             logger.error(f"Error getting concerts: {str(e)}")
             return []
 
-    def get_page_count(self):
+    def _get_page_count(self):
         try:
             url = f"https://filharmoniakrakow.pl/public/program/?keyword=&fDateFrom={self.date_from}&fDateTo={self.date_to}"
             response = requests.get(url=url, headers=self.headers, timeout=10)
@@ -71,7 +65,7 @@ class KrakowPhilharmonicScraper(Scraper):
             logger.error(f"Error getting page count: {str(e)}")
             return 0
 
-    def get_details_link(self, concert_html):
+    def _get_details_link(self, concert_html):
         date_time = safe_find(
             concert_html, ".repRow-data-mobile", "", "Could not find date and time"
         )

@@ -19,7 +19,6 @@ class KrakowPhilharmonicConcert(Concert):
         self.details_soup = None
 
     def _fetch_concert_details(self):
-        """Fetch and parse the concert details page"""
         try:
             details_response = requests.get(
                 url=self.details_link, headers=self.headers, timeout=10
@@ -30,7 +29,7 @@ class KrakowPhilharmonicConcert(Concert):
             logger.error("Error getting concert details: %s", e)
             raise
 
-    def extract_date(self):
+    def _extract_date(self):
         day = safe_find(
             soup=self.details_soup,
             selector=".card-day",
@@ -58,14 +57,14 @@ class KrakowPhilharmonicConcert(Concert):
             )
             self.date = "Unknown date Unknown time"
 
-    def extract_title(self):
+    def _extract_title(self):
         self.title = safe_find(
             soup=self.details_soup,
             selector=".section-title-upper",
             error_msg="Could not find title",
         ).title()
 
-    def extract_concert_type(self):
+    def _extract_concert_type(self):
         self.concert_type = safe_find_by_text(
             soup=self.details_soup,
             tag="span",
@@ -73,7 +72,7 @@ class KrakowPhilharmonicConcert(Concert):
             error_msg="Could not find concert type",
         )
 
-    def extract_programme(self):
+    def _extract_programme(self):
         programme = []
         programme_header = self.details_soup.find("h2", string="Repertuar:")
 
@@ -109,7 +108,7 @@ class KrakowPhilharmonicConcert(Concert):
 
         self.programme = programme
 
-    def extract_composers(self):
+    def _extract_composers(self):
         self.composers = []
         for p in self.programme:
             composer_pattern = re.compile(
@@ -119,7 +118,7 @@ class KrakowPhilharmonicConcert(Concert):
             if composer_match:
                 self.composers.append(composer_match.group(1).strip())
 
-    def extract_venue(self):
+    def _extract_venue(self):
         self.venue = safe_find_by_text(
             soup=self.details_soup,
             tag="span",
@@ -127,5 +126,5 @@ class KrakowPhilharmonicConcert(Concert):
             error_msg="Could not find venue",
         )
 
-    def extract_source(self):
+    def _extract_source(self):
         self.source = "Filharmonia Krakowska"

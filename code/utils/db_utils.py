@@ -64,7 +64,9 @@ def save_to_database(concert_list):
         config = db_config.load_config()
         with psycopg2.connect(**config) as conn:
             with conn.cursor() as cursor:
+                cnt = 0
                 for concert in concert_list:
+                    cnt += 1
                     date = datetime.strptime(concert.date, "%d-%m-%Y %H:%M")
 
                     cursor.execute(
@@ -82,7 +84,7 @@ def save_to_database(concert_list):
                     )
 
                 conn.commit()
-                logger.info("Successfully saved %d concerts", len(concert_list))
+                logger.info("Successfully saved %d concerts", cnt)
                 return True
     except (psycopg2.DatabaseError, Exception) as e:
         logger.error("Error saving to database: %s", e)
