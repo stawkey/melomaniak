@@ -1,10 +1,11 @@
-from ...common.scraper import Scraper
-from .concert import KrakowPhilharmonicConcert
+from common.scraper import Scraper
+from scrapers.krakow_philharmonic.concert import KrakowPhilharmonicConcert
 from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
-from ...utils.logging_config import logger
-from ...utils.html_extractor import safe_find, safe_find_attr
+from utils.logging_config import logger
+from utils.html_extractor import safe_find, safe_find_attr
+from utils.config import *
 
 
 class KrakowPhilharmonicScraper(Scraper):
@@ -15,13 +16,6 @@ class KrakowPhilharmonicScraper(Scraper):
         # date_now = datetime.today()
         # self.date_from = date_now.strftime("%Y-%m-%d")
         # self.date_to = date_now.replace(year=date_now.year + 1).strftime("%Y-%m-%d")
-
-        self.headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "Accept-Language": "en-US,en;q=0.5",
-            "Accept-Encoding": "gzip, deflate, br, zstd",
-        }
 
     def _create_concert(self):
         return KrakowPhilharmonicConcert()
@@ -34,7 +28,7 @@ class KrakowPhilharmonicScraper(Scraper):
 
                 response = requests.get(
                     url=url,
-                    headers=self.headers,
+                    headers=headers,
                     timeout=10,
                 )
                 response.raise_for_status()
@@ -42,8 +36,7 @@ class KrakowPhilharmonicScraper(Scraper):
                 soup = BeautifulSoup(response.text, "lxml")
                 concerts = soup.select(".repRow.block-item")
 
-                for c in concerts:
-                    yield c
+                return concerts
 
         except requests.exceptions.RequestException as e:
             logger.error(f"Error getting concerts: {str(e)}")
@@ -52,7 +45,7 @@ class KrakowPhilharmonicScraper(Scraper):
     def _get_page_count(self):
         try:
             url = f"https://filharmoniakrakow.pl/public/program/?keyword=&fDateFrom={self.date_from}&fDateTo={self.date_to}"
-            response = requests.get(url=url, headers=self.headers, timeout=10)
+            response = requests.get(url=url, headers=headers, timeout=10)
             response.raise_for_status()
 
             soup = BeautifulSoup(response.text, "lxml")
@@ -67,15 +60,16 @@ class KrakowPhilharmonicScraper(Scraper):
 
     def _get_details_link(self, concert_html):
         date_time = safe_find(
-            concert_html, ".repRow-data-mobile", "", "Could not find date and time"
+            soup=concert_html,
+            selector=".repRow-data-mobile",
+            error_msg="Could not find date and time",
         )
 
         details_href = safe_find_attr(
-            concert_html,
-            ".primary-btn-light",
-            "href",
-            "",
-            f"Could not find details link for concert on {date_time}",
+            soup=concert_html,
+            selector=".primary-btn-light",
+            attr="href",
+            error_msg=f"Could not find details link for concert on {date_time}",
         )
 
         if not details_href:

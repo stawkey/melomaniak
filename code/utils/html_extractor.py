@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from .logging_config import logger
+from utils.logging_config import logger
 
 
 def safe_find(soup, selector, default="", error_msg="Element not found"):

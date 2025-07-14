@@ -1,7 +1,7 @@
 import psycopg2
-from .logging_config import logger
+from utils.logging_config import logger
 from datetime import datetime
-from . import db_config
+from utils import db_config
 
 
 def check_if_concert_exists(details_link):

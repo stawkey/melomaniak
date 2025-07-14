@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Optional
-from ..utils.logging_config import logger
+from utils.logging_config import logger
+from bs4 import BeautifulSoup
+import requests
+from utils.config import *
 
 
 class Concert(ABC):
@@ -13,6 +16,7 @@ class Concert(ABC):
         self.venue = None
         self.source = None
         self.details_link = None
+        self.details_soup = None
 
     def extract_concert_data(self, details_link) -> Optional["Concert"]:
         logger.info("Starting data extraction for: %s", details_link)
@@ -35,9 +39,16 @@ class Concert(ABC):
             logger.error("Error extracting concert data: %s", e)
             return None
 
-    @abstractmethod
     def _fetch_concert_details(self):
-        pass
+        try:
+            details_response = requests.get(
+                url=self.details_link, headers=headers, timeout=10
+            )
+            details_response.raise_for_status()
+            self.details_soup = BeautifulSoup(details_response.text, "lxml")
+        except requests.exceptions.RequestException as e:
+            logger.error("Error getting concert details: %s", e)
+            raise
 
     @abstractmethod
     def _extract_date(self):

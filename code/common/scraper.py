@@ -1,19 +1,18 @@
 from abc import ABC, abstractmethod
 from typing import List
-from .concert import Concert
-from ..utils.logging_config import logger
+from common.concert import Concert
+from utils.logging_config import logger
 from random import SystemRandom
 import time
-from ..utils.db_utils import check_if_concert_exists
+from utils.db_utils import check_if_concert_exists
 
 
 class Scraper(ABC):
     def scrape(self):
         cryptogen = SystemRandom()
         concerts_html = self._get_individual_concerts_html()
-        n = 0
-        for _ in concerts_html:
-            n += 1
+        n = len(concerts_html)
+
         logger.info("Found %d concerts", n)
 
         for i, concert_html in enumerate(concerts_html, 1):

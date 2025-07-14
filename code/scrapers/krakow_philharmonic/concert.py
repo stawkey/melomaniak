@@ -1,34 +1,14 @@
-from ...common.concert import Concert
-from ...utils.logging_config import logger
-from ...utils.html_extractor import safe_find, safe_find_by_text
+from common.concert import Concert
+from utils.logging_config import logger
+from utils.html_extractor import safe_find, safe_find_by_text
 import re
 import copy
 from bs4 import BeautifulSoup
 import requests
+from utils.config import *
 
 
 class KrakowPhilharmonicConcert(Concert):
-    def __init__(self):
-        super().__init__()
-        self.headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "Accept-Language": "en-US,en;q=0.5",
-            "Accept-Encoding": "gzip, deflate, br, zstd",
-        }
-        self.details_soup = None
-
-    def _fetch_concert_details(self):
-        try:
-            details_response = requests.get(
-                url=self.details_link, headers=self.headers, timeout=10
-            )
-            details_response.raise_for_status()
-            self.details_soup = BeautifulSoup(details_response.text, "lxml")
-        except requests.exceptions.RequestException as e:
-            logger.error("Error getting concert details: %s", e)
-            raise
-
     def _extract_date(self):
         day = safe_find(
             soup=self.details_soup,
@@ -48,12 +28,12 @@ class KrakowPhilharmonicConcert(Concert):
 
         try:
             date_part = f"{day}-{month_year}".strip()
-            hour_part = hour.split()[-1].strip() if hour else "Unknown time"
+            hour_part = hour.split()[-1].strip()
 
             self.date = f"{date_part} {hour_part}"
         except Exception as e:
             logger.warning(
-                f"Invalid date/time format: '{day} {month_year} {hour}' - {e}"
+                f"Invalid date/time format: '{day} {month_year} {hour}': {e}"
             )
             self.date = "Unknown date Unknown time"
 
@@ -72,13 +52,17 @@ class KrakowPhilharmonicConcert(Concert):
             error_msg="Could not find concert type",
         )
 
+        if self.concert_type == "Koncert Chóralny":
+            self.concert_type = "Koncerty Chóralne"
+        elif self.concert_type == "Koncert jazzowy":
+            self.concert_type = "Koncerty Jazzowe"
+
     def _extract_programme(self):
-        programme = []
+        self.programme = []
         programme_header = self.details_soup.find("h2", string="Repertuar:")
 
         if not programme_header:
             logger.warning("Could not find programme header")
-            self.programme = programme
             return
 
         paragraph = programme_header.find_next_sibling()
@@ -97,16 +81,14 @@ class KrakowPhilharmonicConcert(Concert):
                 for item in content.split("||SPLIT||"):
                     item = " ".join(item.split())
                     if item and not re.match(r"^[*\s]*$", item):
-                        programme.append(item)
+                        self.programme.append(item)
             else:
                 text = p_copy.get_text()
                 text = " ".join(text.split())
                 if text and not re.match(r"^[*\s]*$", text):
-                    programme.append(text)
+                    self.programme.append(text)
 
             paragraph = paragraph.find_next_sibling()
-
-        self.programme = programme
 
     def _extract_composers(self):
         self.composers = []
