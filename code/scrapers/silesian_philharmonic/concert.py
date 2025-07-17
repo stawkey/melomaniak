@@ -106,7 +106,15 @@ class SilesianPhilharmonicConcert(Concert):
             self.programme = self.programme
             return
 
-        next_element = programme_header.find_next_sibling("ul").find_next_sibling("ul")
+        first_ul = programme_header.find_next_sibling("ul")
+        if not first_ul:
+            logger.warning("Could not find first ul element after programme header")
+            return
+
+        next_element = first_ul.find_next_sibling("ul")
+        if not next_element:
+            logger.warning("Could not find second ul element for programme")
+            return
 
         for li in next_element.find_all("li"):
             li_copy = copy.deepcopy(li)

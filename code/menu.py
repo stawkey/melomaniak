@@ -1,6 +1,6 @@
 from scrapers.krakow_philharmonic.scraper import KrakowPhilharmonicScraper
 from scrapers.silesian_philharmonic.scraper import SilesianPhilharmonicScraper
-from utils.db_utils import save_to_database, create_table
+from utils.db_utils import save_to_database, create_tables
 
 
 class PhilharmonicMenu:
@@ -11,7 +11,7 @@ class PhilharmonicMenu:
         }
 
     def run(self):
-        create_table()
+        create_tables()
 
         while True:
             self.display_menu()

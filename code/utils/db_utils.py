@@ -24,20 +24,30 @@ def check_if_concert_exists(details_link):
         return True
 
 
-def create_table():
-    create_table_query = """
+def create_tables():
+    create_tables_query = """
         CREATE TABLE IF NOT EXISTS concerts (
-        id SERIAL PRIMARY KEY,
-        date TIMESTAMP,
-        title VARCHAR(300),
-        concert_type VARCHAR(200),
-        composers VARCHAR(200)[],
-        programme VARCHAR(400)[],
-        venue VARCHAR(200),
-        source VARCHAR(200),
-        details_link VARCHAR(500),
-        modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        id serial PRIMARY KEY,
+        date timestamp,
+        title varchar(300),
+        concert_type varchar(200),
+        venue varchar(200),
+        source varchar(200),
+        details_link varchar(500),
+        modified_at timestamp DEFAULT CURRENT_TIMESTAMP,
+        created_at timestamp DEFAULT CURRENT_TIMESTAMP
+        );
+        
+        CREATE TABLE IF NOT EXISTS composers (
+        id serial PRIMARY KEY,
+        concert_id integer REFERENCES concerts,
+        composer VARCHAR(200)
+        );
+        
+        CREATE TABLE IF NOT EXISTS programmes (
+        id serial PRIMARY KEY,
+        concert_id integer REFERENCES concerts,
+        piece VARCHAR(400)
         );
     """
 
@@ -45,7 +55,7 @@ def create_table():
         config = db_config.load_config()
         with psycopg2.connect(**config) as conn:
             with conn.cursor() as cursor:
-                cursor.execute(create_table_query)
+                cursor.execute(create_tables_query)
                 conn.commit()
     except (psycopg2.DatabaseError, Exception) as e:
         logger.error("Error creating table: %s", e)
@@ -57,8 +67,15 @@ def save_to_database(concert_list):
         logger.warning("No concerts to save to database")
         return False
 
-    insert_query = """INSERT INTO concerts (date, title, concert_type, composers, programme, venue, source, details_link)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
+    concerts_insert_query = """INSERT INTO concerts (date, title, concert_type, venue, source, details_link) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id"""
+
+    composers_insert_query = (
+        """INSERT INTO composers (concert_id, composer) VALUES (%s, %s)"""
+    )
+
+    programme_insert_query = (
+        """INSERT INTO programmes (concert_id, piece) VALUES (%s, %s)"""
+    )
 
     try:
         config = db_config.load_config()
@@ -70,18 +87,23 @@ def save_to_database(concert_list):
                     date = datetime.strptime(concert.date, "%d-%m-%Y %H:%M")
 
                     cursor.execute(
-                        insert_query,
+                        concerts_insert_query,
                         (
                             date,
                             concert.title,
                             concert.concert_type,
-                            concert.composers,
-                            concert.programme,
                             concert.venue,
                             concert.source,
                             concert.details_link,
                         ),
                     )
+                    concert_id = cursor.fetchone()[0]
+
+                    for composer in concert.composers:
+                        cursor.execute(composers_insert_query, (concert_id, composer))
+
+                    for piece in concert.programme:
+                        cursor.execute(programme_insert_query, (concert_id, piece))
 
                 conn.commit()
                 logger.info("Successfully saved %d concerts", cnt)

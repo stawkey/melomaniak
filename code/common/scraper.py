@@ -1,3 +1,4 @@
+import sys
 from abc import ABC, abstractmethod
 from typing import List
 from common.concert import Concert
@@ -14,18 +15,24 @@ class Scraper(ABC):
         n = len(concerts_html)
 
         logger.info("Found %d concerts", n)
+        print(f"Found {n} concerts")
 
+        concert_list = []
         for i, concert_html in enumerate(concerts_html, 1):
             logger.info("Processing concert %d/%d", i, n)
-            print("Processing concert %d, %d", i, n)
+            sys.stdout.write(f"\rProcessing concert {i}/{n}")
+            sys.stdout.flush()
             details_link = self._get_details_link(concert_html)
 
             if details_link and not check_if_concert_exists(details_link):
                 concert = self._create_concert()
                 concert_data = concert.extract_concert_data(details_link)
                 if concert_data:
-                    yield concert_data
+                    concert_list.append(concert_data)
             time.sleep(cryptogen.uniform(0.5, 2))
+
+        print()
+        return concert_list
 
     @abstractmethod
     def _create_concert(self) -> Concert:
