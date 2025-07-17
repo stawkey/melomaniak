@@ -10,18 +10,19 @@ from utils.config import *
 
 class KrakowPhilharmonicScraper(Scraper):
     def __init__(self):
-        self.date_from = "2025-07-01"
-        self.date_to = "2025-07-10"
+        # self.date_from = "2025-07-01"
+        # self.date_to = "2025-07-10"
 
-        # date_now = datetime.today()
-        # self.date_from = date_now.strftime("%Y-%m-%d")
-        # self.date_to = date_now.replace(year=date_now.year + 1).strftime("%Y-%m-%d")
+        date_now = datetime.today()
+        self.date_from = date_now.strftime("%Y-%m-%d")
+        self.date_to = date_now.replace(year=date_now.year + 1).strftime("%Y-%m-%d")
 
     def _create_concert(self):
         return KrakowPhilharmonicConcert()
 
     def _get_individual_concerts_html(self):
         try:
+            all_concerts = []
             pages = self._get_page_count()
             for p in range(1, pages + 1):
                 url = f"https://filharmoniakrakow.pl/public/program/{p}?type=pagination&keyword=&fType=&fPerformer=&fComposer=&fInstruments=&fDateFrom={self.date_from}&fDateTo={self.date_to}&fSubscriptions="
@@ -35,8 +36,9 @@ class KrakowPhilharmonicScraper(Scraper):
 
                 soup = BeautifulSoup(response.text, "lxml")
                 concerts = soup.select(".repRow.block-item")
+                all_concerts.extend(concerts)
 
-                return concerts
+            return all_concerts
 
         except requests.exceptions.RequestException as e:
             logger.error(f"Error getting concerts: {str(e)}")

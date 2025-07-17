@@ -48,5 +48,4 @@ class SilesianPhilharmonicScraper(Scraper):
             logger.warning(f"Missing details link for concert on {date}")
             return None
 
-        print(details_link)
         return details_link
