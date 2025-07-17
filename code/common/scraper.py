@@ -17,6 +17,7 @@ class Scraper(ABC):
 
         for i, concert_html in enumerate(concerts_html, 1):
             logger.info("Processing concert %d/%d", i, n)
+            print("Processing concert %d, %d", i, n)
             details_link = self._get_details_link(concert_html)
 
             if details_link and not check_if_concert_exists(details_link):

@@ -7,7 +7,7 @@ from datetime import datetime
 logger = logging.getLogger("scraper_logger")
 
 if not logger.handlers:
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.WARNING)
 
     logs_dir = "logs"
     if not os.path.exists(logs_dir):
