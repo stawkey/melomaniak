@@ -22,10 +22,8 @@ class Concert(ABC):
         logger.info("Starting data extraction for: %s", details_link)
         self.details_link = details_link
         try:
-            if hasattr(self, "_fetch_from_api"):
-                self._fetch_from_api()
-
             self._fetch_concert_details()
+
             self._extract_date()
             self._extract_title()
             self._extract_concert_type()
@@ -77,3 +75,17 @@ class Concert(ABC):
     @abstractmethod
     def _extract_source(self):
         pass
+
+    def __str__(self):
+        return (
+            f"""
+            date: {self.date}, 
+            title: {self.title}, 
+            concert_type: {self.concert_type}, 
+            programme: {self.programme}, 
+            composers: {self.composers}, 
+            venue: {self.venue}, 
+            source: {self.source}, 
+            details_link: {self.details_link}
+            """
+        )

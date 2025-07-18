@@ -1,5 +1,6 @@
 from scrapers.krakow_philharmonic.scraper import KrakowPhilharmonicScraper
 from scrapers.silesian_philharmonic.scraper import SilesianPhilharmonicScraper
+from scrapers.krakow_opera.scraper import KrakowOperaScraper
 from utils.db_utils import save_to_database, create_tables
 
 
@@ -8,6 +9,7 @@ class PhilharmonicMenu:
         self.scrapers = {
             "1": ("Krakow Philharmonic", KrakowPhilharmonicScraper),
             "2": ("Silesian Philharmonic", SilesianPhilharmonicScraper),
+            "3": ("Krakow Opera", KrakowOperaScraper),
         }
 
     def run(self):
@@ -33,7 +35,9 @@ class PhilharmonicMenu:
                 print("No results to save")
                 continue
 
-            print(results)
+            print("\n--- Concert Results ---")
+            for i, concert in enumerate(results, 1):
+                print(concert)
 
             print(f"\nFound {len(results)} results")
             save_choice = input("Do you want to save to database? (y/n): ")
