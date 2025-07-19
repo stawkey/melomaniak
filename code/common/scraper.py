@@ -25,7 +25,12 @@ class Scraper(ABC):
             details_link = self._get_details_link(concert_html)
 
             if details_link and not check_if_concert_exists(details_link):
-                concert = self._create_concert()
+                # for silesian opera
+                concert_type = concert_html.get("data-concert-type")
+                if concert_type:
+                    concert = self._create_concert(concert_html)
+                else:
+                    concert = self._create_concert()
                 concert_data = concert.extract_concert_data(details_link)
                 if concert_data:
                     concert_list.append(concert_data)

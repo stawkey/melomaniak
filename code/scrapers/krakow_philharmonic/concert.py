@@ -4,7 +4,6 @@ from utils.html_extractor import safe_find, safe_find_by_text
 import re
 import copy
 from bs4 import BeautifulSoup
-import requests
 from utils.config import *
 
 

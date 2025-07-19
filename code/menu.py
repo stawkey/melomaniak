@@ -1,6 +1,7 @@
 from scrapers.krakow_philharmonic.scraper import KrakowPhilharmonicScraper
 from scrapers.silesian_philharmonic.scraper import SilesianPhilharmonicScraper
 from scrapers.krakow_opera.scraper import KrakowOperaScraper
+from scrapers.silesian_opera.scraper import SilesianOperaScraper
 from utils.db_utils import save_to_database, create_tables
 
 
@@ -10,6 +11,7 @@ class PhilharmonicMenu:
             "1": ("Krakow Philharmonic", KrakowPhilharmonicScraper),
             "2": ("Silesian Philharmonic", SilesianPhilharmonicScraper),
             "3": ("Krakow Opera", KrakowOperaScraper),
+            "4": ("Silesian Opera", SilesianOperaScraper),
         }
 
     def run(self):

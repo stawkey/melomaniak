@@ -1,7 +1,6 @@
 from common.concert import Concert
 from utils.logging_config import logger
 from datetime import datetime
-import re
 from typing import Dict, Any
 
 

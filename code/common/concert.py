@@ -20,6 +20,7 @@ class Concert(ABC):
 
     def extract_concert_data(self, details_link) -> Optional["Concert"]:
         logger.info("Starting data extraction for: %s", details_link)
+
         self.details_link = details_link
         try:
             self._fetch_concert_details()
@@ -77,8 +78,7 @@ class Concert(ABC):
         pass
 
     def __str__(self):
-        return (
-            f"""
+        return f"""
             date: {self.date}, 
             title: {self.title}, 
             concert_type: {self.concert_type}, 
@@ -88,4 +88,3 @@ class Concert(ABC):
             source: {self.source}, 
             details_link: {self.details_link}
             """
-        )
