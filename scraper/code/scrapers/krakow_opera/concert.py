@@ -12,7 +12,7 @@ class KrakowOperaConcert(Concert):
 
     def extract_concert_data(self, details_link=None):
         try:
-            self.details_link = "https://opera.krakow.pl/repertuar"
+            self.details_link = "https://opera.krakow.pl/spektakle"
 
             self._extract_date()
             self._extract_title()
