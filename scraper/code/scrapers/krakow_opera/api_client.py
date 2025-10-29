@@ -15,14 +15,21 @@ class KrakowOperaApiClient:
             response = requests.get(url=url, params=params, headers=headers, timeout=10)
 
             response_text = response.text
+
             logger.debug(f"Raw response length: {len(response_text)}")
             logger.debug(f"Response starts with: {response_text[:100]}")
 
             script_end = response_text.find("</script>")
             json_part = response_text[script_end + 9 :].strip()
 
-            data = json.loads(json_part)
+            text = response_text.strip()
+            if "<script" in text:
+                text = text[text.find("</script>") + 9 :]
+                text = text[: text.find("<script")]
 
+            json_part = text.strip()
+
+            data = json.loads(json_part)
             performances = data.get("performances", [])
 
             return performances
