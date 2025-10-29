@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace backend.Models;
 
-public partial class Composer
+public class Composer
 {
     public int Id { get; set; }
 
