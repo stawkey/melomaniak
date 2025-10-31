@@ -32,30 +32,22 @@ public class ConcertsController(FilharmoniaContext context) : ControllerBase
         var query = _context.Concerts
             .Include(c => c.Composers)
             .Include(c => c.Programmes)
-            .Where(c => c.Date >= filter.StartDate)
+            .OrderBy(c => c.Date)
             .AsQueryable();
 
-        if (filter.Composers != null)
-            query = query.Where(c => c.Composers.Any(p => p.Composer1 != null && EF.Functions.ILike(p.Composer1, $"%{filter.Composers}%")));
+        var filters = new List<(bool condition, Expression<Func<Concert, bool>> predicate)>
+        {
+            (true, c => c.Date.Value.Date >= filter.StartDate.Date),
+            (filter.EndDate.HasValue, c => c.Date.Value.Date <= filter.EndDate.Value.Date),
+            (!string.IsNullOrEmpty(filter.Venue), c => c.Venue != null && EF.Functions.ILike(c.Venue, $"%{filter.Venue}%")),
+            (!string.IsNullOrEmpty(filter.ConcertType), c => c.ConcertType != null && EF.Functions.ILike(c.ConcertType, $"%{filter.ConcertType}%")),
+            (!string.IsNullOrEmpty(filter.Title), c => c.Title != null && EF.Functions.ILike(c.Title, $"%{filter.Title}%")),
+            (!string.IsNullOrEmpty(filter.Source), c => c.Source != null && EF.Functions.ILike(c.Source, $"%{filter.Source}%")),
+            (!string.IsNullOrEmpty(filter.Composers), c => c.Composers.Any(p => p.Composer1 != null && EF.Functions.ILike(p.Composer1, $"%{filter.Composers}%"))),
+            (!string.IsNullOrEmpty(filter.Programme), c => c.Programmes.Any(p => p.Piece != null && EF.Functions.ILike(p.Piece, $"%{filter.Programme}%")))
+        };
 
-        if (filter.Programme != null)
-            query = query.Where(c => c.Programmes.Any(p => p.Piece != null && EF.Functions.ILike(p.Piece, $"%{filter.Programme}%")));
-
-        if (filter.EndDate != null)
-            query = query.Where(c => c.Date <= filter.EndDate);
-
-        if (filter.Venue != null)
-            query = query.Where(c => c.Venue != null && EF.Functions.ILike(c.Venue, $"%{filter.Venue}%"));
-
-        if (filter.ConcertType != null)
-            query = query.Where(c => c.ConcertType != null && EF.Functions.ILike(c.ConcertType, $"%{filter.ConcertType}%"));
-
-        if (filter.ConcertTitle != null)
-            query = query.Where(c => c.Title != null && EF.Functions.ILike(c.Title, $"%{filter.ConcertTitle}%"));
-
-        if (filter.Source != null)
-            query = query.Where(c => c.Source != null && EF.Functions.ILike(c.Source, $"%{filter.Source}%"));
-
-        return query;
+        return filters.Where(f => f.condition)
+                      .Aggregate(query, (current, f) => current.Where(f.predicate));
     }
 }

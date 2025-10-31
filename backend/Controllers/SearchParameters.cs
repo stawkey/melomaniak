@@ -4,7 +4,7 @@ public class SearchParameters
 {
     const int MaxPageSize = 100;
     public int PageNumber { get; set; } = 1;
-    private int _pageSize = 50;
+    private int _pageSize = 30;
     public int PageSize
     {
         get { return _pageSize; }
