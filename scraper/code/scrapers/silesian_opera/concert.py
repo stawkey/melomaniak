@@ -21,7 +21,7 @@ class SilesianOperaConcert(Concert):
         programme = self.concert_html.get("data-programme")
 
         if programme != "None":
-            self.programme = programme
+            self.programme = [programme]
         else:
             self.programme = []
 
