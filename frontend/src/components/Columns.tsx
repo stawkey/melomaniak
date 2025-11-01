@@ -24,6 +24,7 @@ const columns: ColumnDef<Concert>[] = [
     {
         accessorKey: "programmes",
         header: "Program",
+        size: 400,
         cell: (props) => {
             const programmes = props.getValue() as Array<any>;
             return (

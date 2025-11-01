@@ -62,7 +62,7 @@ function Table() {
                                                 header.column.getIsResizing() ? "is-resizing" : ""
                                             }`}
                                         ></div>
-                                        {header.column.columnDef.header === "Data" ? (
+                                        {header.column.id === "date" ? (
                                             <DateRangeCallendar
                                                 filter={filter}
                                                 dispatch={dispatch}
