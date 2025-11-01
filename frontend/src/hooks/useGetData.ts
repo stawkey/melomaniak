@@ -4,14 +4,12 @@ import type { Concert } from "../models/Concert.type";
 import type { Filter } from "../models/Filter.type";
 
 type PaginatedResponse = {
-    pageNumber: number;
     totalPages: number;
     data: Concert[];
 };
 
 export default function useGetData(filter: Filter, pageNumber: number = 1) {
     const [data, setData] = useState<PaginatedResponse>({
-        pageNumber: 1,
         totalPages: 1,
         data: [],
     });
@@ -35,7 +33,6 @@ export default function useGetData(filter: Filter, pageNumber: number = 1) {
                     },
                 });
                 setData({
-                    pageNumber: result.data.pageNumber || 1,
                     totalPages: result.data.totalPages || 1,
                     data: result.data.concerts || [],
                 });

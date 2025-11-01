@@ -6,11 +6,10 @@ import {
 } from "@tanstack/react-table";
 import useGetData from "../hooks/useGetData";
 import DateRangeCallendar from "./DateRangeCallendar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import columns from "./Columns";
 import useFiltering from "../hooks/useFiltering";
 import { useState } from "react";
+import FilterInput from "./FilterInput";
 
 function Table() {
     const { filter, dispatch } = useFiltering();
@@ -20,7 +19,7 @@ function Table() {
         pageSize: 30,
     });
 
-    const { pageNumber, totalPages, data } = useGetData(filter, pagination.pageIndex + 1);
+    const { totalPages, data } = useGetData(filter, pagination.pageIndex + 1);
 
     const table = useReactTable({
         data,
@@ -69,48 +68,7 @@ function Table() {
                                                 dispatch={dispatch}
                                             />
                                         ) : (
-                                            <div className="filter-input-container">
-                                                <FontAwesomeIcon
-                                                    icon={faFilter}
-                                                    className="filter-icon"
-                                                />
-                                                <input
-                                                    type="text"
-                                                    className="filter-input"
-                                                    id={`${header.column.columnDef.header}`}
-                                                    name={`${header.column.columnDef.header}`}
-                                                    onBlur={(
-                                                        e: React.FocusEvent<HTMLInputElement>
-                                                    ) => {
-                                                        const headerId = header.column.id
-                                                            .split(/\.?(?=[A-Z])/)
-                                                            .join("_")
-                                                            .toUpperCase();
-
-                                                        dispatch({
-                                                            type: "SET_" + headerId,
-                                                            payload: e.target.value,
-                                                        });
-                                                    }}
-                                                    onKeyDown={(
-                                                        e: React.KeyboardEvent<HTMLInputElement>
-                                                    ) => {
-                                                        if (e.key === "Enter") {
-                                                            const headerId = header.column.id
-                                                                .split(/\.?(?=[A-Z])/)
-                                                                .join("_")
-                                                                .toUpperCase();
-
-                                                            dispatch({
-                                                                type: "SET_" + headerId,
-                                                                payload: (
-                                                                    e.target as HTMLInputElement
-                                                                ).value,
-                                                            });
-                                                        }
-                                                    }}
-                                                />
-                                            </div>
+                                            <FilterInput dispatch={dispatch} header={header} />
                                         )}
                                     </div>
                                 </th>
