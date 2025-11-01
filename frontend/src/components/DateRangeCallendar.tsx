@@ -2,22 +2,9 @@ import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import type { Filter } from "../models/Filter.type";
 
-interface DateRangeProps {
-    startDate: Date | null | undefined;
-    setStartDate: (date: Date | null | undefined) => void;
-    endDate: Date | null | undefined;
-    setEndDate: (date: Date | null | undefined) => void;
-}
-
-const DateRange: React.FC<DateRangeProps> = ({ startDate, setStartDate, endDate, setEndDate }) => {
-    const formatDate = (date: Date): string => {
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const year = date.getFullYear();
-        return `${day}.${month}.${year}`;
-    };
-
+const DateRangeCallendar = ({ filter, dispatch }: { filter: Filter; dispatch: Function }) => {
     const nextYearDate = new Date();
     nextYearDate.setFullYear(nextYearDate.getFullYear() + 1);
 
@@ -26,12 +13,16 @@ const DateRange: React.FC<DateRangeProps> = ({ startDate, setStartDate, endDate,
             <div className="filter-input-container">
                 <FontAwesomeIcon icon={faCalendar} className="filter-icon" />
                 <DatePicker
-                    placeholderText={formatDate(new Date())}
-                    selected={startDate}
-                    onChange={(date: Date | null) => setStartDate(date)}
+                    selected={filter.startDate}
+                    onChange={(date) => {
+                        dispatch({
+                            type: "SET_START_DATE",
+                            payload: date,
+                        });
+                    }}
                     selectsStart
-                    startDate={startDate}
-                    endDate={endDate}
+                    startDate={filter.startDate}
+                    endDate={filter.endDate}
                     dateFormat="dd.MM.yyyy"
                     className="date-picker-input"
                 />
@@ -39,13 +30,17 @@ const DateRange: React.FC<DateRangeProps> = ({ startDate, setStartDate, endDate,
             <div className="filter-input-container">
                 <FontAwesomeIcon icon={faCalendar} className="filter-icon" />
                 <DatePicker
-                    placeholderText={formatDate(nextYearDate)}
-                    selected={endDate}
-                    onChange={(date: Date | null) => setEndDate(date)}
+                    selected={filter.endDate}
+                    onChange={(date) => {
+                        dispatch({
+                            type: "SET_END_DATE",
+                            payload: date,
+                        });
+                    }}
                     selectsEnd
-                    startDate={startDate}
-                    endDate={endDate}
-                    minDate={startDate}
+                    startDate={filter.startDate}
+                    endDate={filter.endDate}
+                    minDate={filter.startDate}
                     dateFormat="dd.MM.yyyy"
                     className="date-picker-input"
                 />
@@ -54,4 +49,4 @@ const DateRange: React.FC<DateRangeProps> = ({ startDate, setStartDate, endDate,
     );
 };
 
-export default DateRange;
+export default DateRangeCallendar;

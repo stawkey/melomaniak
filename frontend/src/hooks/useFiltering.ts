@@ -1,41 +1,62 @@
-import { useMemo, useState } from "react";
+import { useReducer } from "react";
 import type { Filter } from "../models/Filter.type";
 
+type Action =
+    | { type: "SET_START_DATE"; payload: Date }
+    | { type: "SET_END_DATE"; payload: Date }
+    | { type: "SET_TITLE"; payload: string }
+    | { type: "SET_CONCERT_TYPE"; payload: string }
+    | { type: "SET_SOURCE"; payload: string }
+    | { type: "SET_VENUE"; payload: string }
+    | { type: "SET_PROGRAMMES"; payload: string }
+    | { type: "SET_COMPOSERS"; payload: string };
+
+const filterReducer = (filter: Filter, action: Action) => {
+    switch (action.type) {
+        case "SET_START_DATE": {
+            return { ...filter, startDate: action.payload };
+        }
+        case "SET_END_DATE": {
+            return { ...filter, endDate: action.payload };
+        }
+        case "SET_TITLE": {
+            return { ...filter, title: action.payload };
+        }
+        case "SET_CONCERT_TYPE": {
+            return { ...filter, concertType: action.payload };
+        }
+        case "SET_SOURCE": {
+            return { ...filter, source: action.payload };
+        }
+        case "SET_VENUE": {
+            return { ...filter, venue: action.payload };
+        }
+        case "SET_PROGRAMMES": {
+            return { ...filter, programme: action.payload };
+        }
+        case "SET_COMPOSERS": {
+            return { ...filter, composer: action.payload };
+        }
+    }
+};
+
 export default function useFiltering() {
-    const [startDate, setStartDate] = useState<Date | null>();
-    const [endDate, setEndDate] = useState<Date | null>();
-    const [title, setTitle] = useState<string>();
-    const [concertType, setConcertType] = useState<string>();
-    const [source, setSource] = useState<string>();
-    const [venue, setVenue] = useState<string>();
-    const [programme, setProgramme] = useState<string>();
-    const [composer, setComposer] = useState<string>();
-
-    const formatDate = (d?: Date | null): string | undefined =>
-        d ? d.toISOString().slice(0, 10) : undefined;
-
-    const filter: Filter = useMemo(
-        () => ({
-            startDate: formatDate(startDate),
-            endDate: formatDate(endDate),
-            title: title || undefined,
-            concertType: concertType || undefined,
-            source: source || undefined,
-            venue: venue || undefined,
-            programme: programme || undefined,
-            composer: composer || undefined,
-        }),
-        [startDate, endDate, title, concertType, source, venue, programme, composer]
-    );
-
-    const filterSetters: Record<string, (v: string) => void> = {
-        Tytuł: setTitle,
-        "Typ Koncertu": setConcertType,
-        Źródło: setSource,
-        Lokalizacja: setVenue,
-        Program: setProgramme,
-        Kompozytorzy: setComposer,
+    const initialfilter: Filter = {
+        startDate: new Date(),
+        endDate: (() => {
+            const d = new Date();
+            d.setFullYear(d.getFullYear() + 1);
+            return d;
+        })(),
+        title: undefined,
+        concertType: undefined,
+        source: undefined,
+        venue: undefined,
+        programme: undefined,
+        composer: undefined,
     };
 
-    return { startDate, setStartDate, endDate, setEndDate, filter, filterSetters };
+    const [filter, dispatch] = useReducer(filterReducer, initialfilter);
+
+    return { filter, dispatch };
 }

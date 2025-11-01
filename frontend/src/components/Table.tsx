@@ -5,7 +5,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table";
 import useGetData from "../hooks/useGetData";
-import DateRange from "./DateRangeCallendar";
+import DateRangeCallendar from "./DateRangeCallendar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import columns from "./Columns";
@@ -13,7 +13,7 @@ import useFiltering from "../hooks/useFiltering";
 import { useState } from "react";
 
 function Table() {
-    const { startDate, setStartDate, endDate, setEndDate, filter, filterSetters } = useFiltering();
+    const { filter, dispatch } = useFiltering();
 
     const [pagination, setPagination] = useState({
         pageIndex: 0,
@@ -64,11 +64,9 @@ function Table() {
                                             }`}
                                         ></div>
                                         {header.column.columnDef.header === "Data" ? (
-                                            <DateRange
-                                                startDate={startDate}
-                                                setStartDate={setStartDate}
-                                                endDate={endDate}
-                                                setEndDate={setEndDate}
+                                            <DateRangeCallendar
+                                                filter={filter}
+                                                dispatch={dispatch}
                                             />
                                         ) : (
                                             <div className="filter-input-container">
@@ -84,29 +82,31 @@ function Table() {
                                                     onBlur={(
                                                         e: React.FocusEvent<HTMLInputElement>
                                                     ) => {
-                                                        const headerName = String(
-                                                            header.column.columnDef.header
-                                                        );
-                                                        const setter = filterSetters[headerName];
-                                                        if (setter) {
-                                                            setter(e.target.value);
-                                                        }
+                                                        const headerId = header.column.id
+                                                            .split(/\.?(?=[A-Z])/)
+                                                            .join("_")
+                                                            .toUpperCase();
+
+                                                        dispatch({
+                                                            type: "SET_" + headerId,
+                                                            payload: e.target.value,
+                                                        });
                                                     }}
                                                     onKeyDown={(
                                                         e: React.KeyboardEvent<HTMLInputElement>
                                                     ) => {
                                                         if (e.key === "Enter") {
-                                                            const headerName = String(
-                                                                header.column.columnDef.header
-                                                            );
-                                                            const setter =
-                                                                filterSetters[headerName];
-                                                            if (setter) {
-                                                                setter(
-                                                                    (e.target as HTMLInputElement)
-                                                                        .value
-                                                                );
-                                                            }
+                                                            const headerId = header.column.id
+                                                                .split(/\.?(?=[A-Z])/)
+                                                                .join("_")
+                                                                .toUpperCase();
+
+                                                            dispatch({
+                                                                type: "SET_" + headerId,
+                                                                payload: (
+                                                                    e.target as HTMLInputElement
+                                                                ).value,
+                                                            });
                                                         }
                                                     }}
                                                 />

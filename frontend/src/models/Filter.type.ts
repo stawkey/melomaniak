@@ -1,6 +1,6 @@
 export type Filter = {
-    startDate?: string;
-    endDate?: string;
+    startDate?: Date;
+    endDate?: Date;
     title?: string;
     concertType?: string;
     source?: string;

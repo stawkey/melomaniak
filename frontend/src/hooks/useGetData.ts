@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import type { Filter } from "../models/Filter.type";
 import type { Concert } from "../models/Concert.type";
+import type { Filter } from "../models/Filter.type";
 
 type PaginatedResponse = {
     pageNumber: number;
@@ -24,8 +24,8 @@ export default function useGetData(filter: Filter, pageNumber: number = 1) {
                 const result = await axios.get(url, {
                     params: {
                         PageNumber: pageNumber,
-                        "Filters.StartDate": filter.startDate,
-                        "Filters.EndDate": filter.endDate,
+                        "Filters.StartDate": filter.startDate?.toISOString().split("T")[0],
+                        "Filters.EndDate": filter.endDate?.toISOString().split("T")[0],
                         "Filters.Title": filter.title,
                         "Filters.ConcertType": filter.concertType,
                         "Filters.Source": filter.source,

@@ -1,5 +1,5 @@
 export type Concert = {
-    date: Date | string;
+    date: Date;
     title: string;
     concertType: string;
     source: string;
