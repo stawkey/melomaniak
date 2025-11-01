@@ -1,20 +1,20 @@
 export type Concert = {
-    date: Date;
+    date: Date | string;
     title: string;
     concertType: string;
     source: string;
     venue: string;
-    programme: Array<Programme>;
-    composers: Array<Composer>;
+    programmes: Array<Programme | string>;
+    composers: Array<Composer | string>;
     detailsLink: string;
 };
 
 export type Composer = {
     composer1: string;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 
 export type Programme = {
     piece: string;
-    [key: string]: any;
+    [key: string]: unknown;
 };
