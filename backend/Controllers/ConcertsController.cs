@@ -24,7 +24,14 @@ public class ConcertsController(FilharmoniaContext context) : ControllerBase
         var pagedConcerts = await PaginatedList<Concert>.CreateAsync(
             query.AsQueryable(), searchParameters.PageNumber, searchParameters.PageSize);
 
-        return Ok(pagedConcerts);
+        var response = new
+        {
+            PageNumber = pagedConcerts.PageNumber,
+            TotalPages = pagedConcerts.TotalPages,
+            Concerts = pagedConcerts
+        };
+
+        return Ok(response);
     }
 
     private IQueryable<Concert> GetFilteredConcerts(ConcertFilter filter)

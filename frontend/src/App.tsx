@@ -2,6 +2,7 @@ import "./App.css";
 import Table from "./components/Table";
 
 // TODO: pagination
+// TODO: allow typing the dates
 // TODO: show/hide and reorder columns
 // TODO: better & responsive column width
 // TODO: optimize resizing so it doesn't rerender too much https://tanstack.com/table/latest/docs/guide/column-sizing
