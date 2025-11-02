@@ -10,9 +10,13 @@ import columns from "./Columns";
 import useFiltering from "../hooks/useFiltering";
 import { useState } from "react";
 import FilterInput from "./FilterInput";
+import Header from "./Header";
 
 function Table() {
     const { filter, dispatch } = useFiltering();
+    const [columnOrder, setColumnOrder] = useState<string[]>(
+        columns.map((col) => (col as any).accessorKey)
+    );
 
     const [pagination, setPagination] = useState({
         pageIndex: 0,
@@ -27,6 +31,7 @@ function Table() {
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         onPaginationChange: setPagination,
+        onColumnOrderChange: setColumnOrder,
         columnResizeMode: "onChange",
         manualPagination: true,
         pageCount: totalPages,
@@ -37,11 +42,13 @@ function Table() {
         },
         state: {
             pagination,
+            columnOrder,
         },
     });
 
     return (
         <>
+            <Header columnOrder={columnOrder} setColumnOrder={setColumnOrder} />
             <table style={{ width: table.getTotalSize() }}>
                 <thead>
                     {table.getHeaderGroups().map((headerGroup) => (

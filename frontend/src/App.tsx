@@ -1,4 +1,5 @@
 import "./App.css";
+import Header from "./components/Header";
 import Table from "./components/Table";
 
 // TODO: show/hide and reorder columns
@@ -7,12 +8,7 @@ import Table from "./components/Table";
 // TODO: make it pretty lol
 
 function App() {
-    return (
-        <div>
-            <h1 style={{ textAlign: "left", margin: 0 }}>Filharmonia</h1>
-            <Table />
-        </div>
-    );
+    return <Table />;
 }
 
 export default App;
