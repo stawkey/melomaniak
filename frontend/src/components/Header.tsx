@@ -1,4 +1,4 @@
-import { faEye, faGear, faGripVertical } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash, faGear, faGripVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import columns from "./Columns";
@@ -8,9 +8,16 @@ const columnTuples = columns.map((col) => [(col as any).accessorKey, (col as any
 interface HeaderProps {
     columnOrder: string[];
     setColumnOrder: (order: string[]) => void;
+    columnVisibility;
+    setColumnVisibility;
 }
 
-const Header: React.FC<HeaderProps> = ({ columnOrder, setColumnOrder }) => {
+const Header: React.FC<HeaderProps> = ({
+    columnOrder,
+    setColumnOrder,
+    columnVisibility,
+    setColumnVisibility,
+}) => {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement | null>(null);
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -45,7 +52,9 @@ const Header: React.FC<HeaderProps> = ({ columnOrder, setColumnOrder }) => {
 
     return (
         <div className="header">
-            <h1 style={{ textAlign: "left", margin: 0 }}>Filharmonia</h1>
+            <div>
+                <h1 className="logo">Filharmonia</h1>
+            </div>
             <div className="settings-container" ref={ref}>
                 <div
                     className="settings-gear"
@@ -76,12 +85,35 @@ const Header: React.FC<HeaderProps> = ({ columnOrder, setColumnOrder }) => {
                                     onDragEnd={() => setDraggedIndex(null)}
                                 >
                                     <FontAwesomeIcon
-                                        className="menu-item-icon"
+                                        className="menu-item-drag"
                                         icon={faGripVertical}
                                         size="2xs"
                                     />
                                     <div className="menu-item-text">{header}</div>
-                                    <FontAwesomeIcon icon={faEye} />
+                                    {columnVisibility[accessorKey] ? (
+                                        <FontAwesomeIcon
+                                            className="menu-item-eye"
+                                            icon={faEye}
+                                            onClick={() =>
+                                                setColumnVisibility((prev: any) => ({
+                                                    ...prev,
+                                                    [accessorKey]: false,
+                                                }))
+                                            }
+                                        />
+                                    ) : (
+                                        <FontAwesomeIcon
+                                            className="menu-item-eye"
+                                            style={{ opacity: 0.6 }}
+                                            icon={faEyeSlash}
+                                            onClick={() =>
+                                                setColumnVisibility((prev: any) => ({
+                                                    ...prev,
+                                                    [accessorKey]: true,
+                                                }))
+                                            }
+                                        />
+                                    )}
                                 </div>
                             );
                         })}

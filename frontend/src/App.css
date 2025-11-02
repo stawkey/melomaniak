@@ -31,8 +31,10 @@
 }
 
 table {
-    border-collapse: collapse;
+    overflow-x: auto;
+    width: 100%;
     margin: 1rem 0;
+    border-collapse: collapse;
 }
 
 th,
@@ -62,17 +64,19 @@ table {
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    margin: 0;
+    text-align: left;
 }
 
 .settings-container {
-    margin-right: 1rem;
     position: absolute;
-    right: 16px;
-    top: 12px;
+    right: 0;
 }
 
 .settings-gear {
@@ -81,29 +85,33 @@ table {
 
 .settings-menu {
     position: absolute;
+    z-index: 100;
     right: 0;
+    min-width: 160px;
+    padding: 4px 0;
     margin-top: 8px;
     background: #1a1a1a;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     border-radius: 4px;
-    padding: 4px 0;
-    min-width: 160px;
-    z-index: 100;
 }
 
 .menu-item {
     display: flex;
-    color: white;
     justify-content: left;
     align-items: center;
     width: 100%;
-    text-align: left;
     padding: 0.4rem 0.5rem;
+    color: white;
+    text-align: left;
 }
 
-.menu-item-icon {
+.menu-item-drag {
     margin: 0.2rem;
     opacity: 0.6;
+}
+
+.menu-item-eye {
+    padding: 0.2rem;
 }
 
 .menu-item-text {

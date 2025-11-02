@@ -19,6 +19,7 @@ const columns: ColumnDef<Concert>[] = [
     {
         accessorKey: "title",
         header: "Tytuł",
+        size: 200,
         cell: (props) => <span>{String(props.getValue())}</span>,
     },
     {
@@ -43,6 +44,7 @@ const columns: ColumnDef<Concert>[] = [
     {
         accessorKey: "composers",
         header: "Kompozytorzy",
+        size: 200,
         cell: (props) => {
             const composers = props.getValue() as Array<any>;
             return (
@@ -61,21 +63,25 @@ const columns: ColumnDef<Concert>[] = [
     {
         accessorKey: "concertType",
         header: "Typ Koncertu",
+        size: 200,
         cell: (props) => <span>{String(props.getValue())}</span>,
     },
     {
         accessorKey: "source",
         header: "Źródło",
+        size: 200,
         cell: (props) => <span>{String(props.getValue())}</span>,
     },
     {
         accessorKey: "venue",
         header: "Lokalizacja",
+        size: 200,
         cell: (props) => <span>{String(props.getValue())}</span>,
     },
     {
         accessorKey: "detailsLink",
         header: "Link",
+        size: 200,
         cell: (props) => <a href={`${String(props.getValue())}`}>Link</a>,
     },
 ];

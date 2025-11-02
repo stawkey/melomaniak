@@ -3,6 +3,7 @@ import {
     getCoreRowModel,
     getPaginationRowModel,
     useReactTable,
+    type VisibilityState,
 } from "@tanstack/react-table";
 import useGetData from "../hooks/useGetData";
 import DateRangeCallendar from "./DateRangeCallendar";
@@ -16,6 +17,13 @@ function Table() {
     const { filter, dispatch } = useFiltering();
     const [columnOrder, setColumnOrder] = useState<string[]>(
         columns.map((col) => (col as any).accessorKey)
+    );
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(() =>
+        columns.reduce((acc, col) => {
+            const key = (col as any).accessorKey as string;
+            acc[key] = ["title", "composers", "venue", "detailsLink"].includes(key) ? false : true;
+            return acc;
+        }, {} as VisibilityState)
     );
 
     const [pagination, setPagination] = useState({
@@ -36,19 +44,23 @@ function Table() {
         manualPagination: true,
         pageCount: totalPages,
         initialState: {
-            columnVisibility: {
-                detailsLink: false,
-            },
+            columnVisibility: columnVisibility,
         },
         state: {
             pagination,
             columnOrder,
+            columnVisibility,
         },
     });
 
     return (
         <>
-            <Header columnOrder={columnOrder} setColumnOrder={setColumnOrder} />
+            <Header
+                columnOrder={columnOrder}
+                setColumnOrder={setColumnOrder}
+                columnVisibility={columnVisibility}
+                setColumnVisibility={setColumnVisibility}
+            />
             <table style={{ width: table.getTotalSize() }}>
                 <thead>
                     {table.getHeaderGroups().map((headerGroup) => (
