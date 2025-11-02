@@ -12,6 +12,8 @@ import useFiltering from "../hooks/useFiltering";
 import { useState } from "react";
 import FilterInput from "./FilterInput";
 import Header from "./Header";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 function Table() {
     const { filter, dispatch } = useFiltering();
@@ -118,17 +120,33 @@ function Table() {
                     })}
                 </tbody>
             </table>
-            <button onClick={() => table.firstPage()} disabled={!table.getCanPreviousPage()}>
-                {"<<"}
+            <button
+                className="pagination-btn"
+                onClick={() => table.firstPage()}
+                disabled={!table.getCanPreviousPage()}
+            >
+                PIERWSZA
             </button>
-            <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-                {"<"}
+            <button
+                className="pagination-btn"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+            >
+                <FontAwesomeIcon icon={faChevronLeft} />
             </button>
-            <button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-                {">"}
+            <button
+                className="pagination-btn"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+            >
+                <FontAwesomeIcon icon={faChevronRight} />
             </button>
-            <button onClick={() => table.lastPage()} disabled={!table.getCanNextPage()}>
-                {">>"}
+            <button
+                className="pagination-btn"
+                onClick={() => table.lastPage()}
+                disabled={!table.getCanNextPage()}
+            >
+                OSTATNIA
             </button>
         </>
     );
