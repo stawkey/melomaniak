@@ -104,13 +104,12 @@ li:last-child {
 }
 
 .logo {
+    font-family: "Story Script", sans-serif;
+    font-weight: 400;
+    font-style: normal;
     margin: 0;
-    background: linear-gradient(135deg, #ffffff 0%, #5050fc 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    font-size: 2.5rem;
+    font-size: 4rem;
     text-align: left;
-    -webkit-text-fill-color: transparent;
 }
 
 .settings-container {

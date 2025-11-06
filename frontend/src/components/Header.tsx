@@ -53,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({
     return (
         <div className="header">
             <div>
-                <h1 className="logo">Filharmonia</h1>
+                <h1 className="logo">Melomaniak</h1>
             </div>
             <div className="settings-container" ref={ref}>
                 <div
