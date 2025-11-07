@@ -17,7 +17,7 @@ export default function useGetData(filter: Filter, pageNumber: number = 1) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const url: string = "https://localhost:7092/api/concerts";
+                const url: string = "/concerts";
 
                 const result = await axios.get(url, {
                     params: {

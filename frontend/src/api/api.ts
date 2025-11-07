@@ -1,4 +1,4 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "https://localhost:7092";
+axios.defaults.baseURL = "http://localhost:5296/api";
 axios.defaults.timeout = 5000;
