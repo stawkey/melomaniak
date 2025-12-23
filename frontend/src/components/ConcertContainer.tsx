@@ -52,7 +52,7 @@ function ConcertContainer() {
     });
 
     return (
-        <div className="concert-container">
+        <>
             <Header
                 columnOrder={columnOrder}
                 setColumnOrder={setColumnOrder}
@@ -67,7 +67,7 @@ function ConcertContainer() {
                 <ConcertTableView table={table} filter={filter} dispatch={dispatch} />
             )}
             <PaginationControls table={table} />
-        </div>
+        </>
     );
 }
 

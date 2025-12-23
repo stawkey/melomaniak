@@ -13,7 +13,7 @@ type Props = {
 
 const ConcertTableView = ({ table, filter, dispatch }: Props) => {
     return (
-        <>
+        <div className="table-container">
             <table style={{ width: table.getTotalSize() }}>
                 <thead>
                     {table.getHeaderGroups().map((headerGroup) => (
@@ -71,7 +71,7 @@ const ConcertTableView = ({ table, filter, dispatch }: Props) => {
                     })}
                 </tbody>
             </table>
-        </>
+        </div>
     );
 };
 

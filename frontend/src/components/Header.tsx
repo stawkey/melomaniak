@@ -67,20 +67,16 @@ const Header = ({
                 <h1 className="logo">Melomaniak</h1>
             </div>
             <div className="settings-container" ref={ref}>
-                <div
-                    className="view-switcher"
-                    onClick={() => setViewMode(viewMode === "grid" ? "table" : "grid")}
-                >
-                    <FontAwesomeIcon icon={faBrush} size="xl" />
-                </div>
-                <div
-                    className="settings-gear"
-                    onClick={() => setOpen((o) => !o)}
-                    aria-haspopup="true"
-                    aria-expanded={open}
-                >
-                    <FontAwesomeIcon icon={faGear} size="xl" />
-                </div>
+                {viewMode === "table" && (
+                    <div
+                        className="settings-gear"
+                        onClick={() => setOpen((o) => !o)}
+                        aria-haspopup="true"
+                        aria-expanded={open}
+                    >
+                        <FontAwesomeIcon icon={faGear} size="xl" />
+                    </div>
+                )}
 
                 {open && (
                     <div className="settings-menu" role="menu">
@@ -136,6 +132,12 @@ const Header = ({
                         })}
                     </div>
                 )}
+                <div
+                    className="view-switcher"
+                    onClick={() => setViewMode(viewMode === "grid" ? "table" : "grid")}
+                >
+                    <FontAwesomeIcon icon={faBrush} size="xl" />
+                </div>
             </div>
         </div>
     );

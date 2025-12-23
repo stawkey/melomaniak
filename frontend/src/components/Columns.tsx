@@ -5,7 +5,7 @@ const columns: ColumnDef<Concert>[] = [
     {
         accessorKey: "date",
         header: "Data",
-        size: 290,
+        size: 240,
         cell: (props) => {
             const value = props.getValue();
             const date = new Date(value);
@@ -25,7 +25,7 @@ const columns: ColumnDef<Concert>[] = [
     {
         accessorKey: "programmes",
         header: "Program",
-        size: 400,
+        size: 350,
         cell: (props) => {
             const programmes = props.getValue() as Array<any>;
             return (

@@ -11,7 +11,7 @@ const DateRangeCallendar = ({ filter, dispatch }: { filter: Filter; dispatch: Fu
     return (
         <div className="date-range-container">
             <div className="filter-input-container">
-                <FontAwesomeIcon icon={faCalendar} className="filter-icon" />
+                {/* <FontAwesomeIcon icon={faCalendar} className="filter-icon" /> */}
                 <DatePicker
                     selected={filter.startDate}
                     onChange={(date) => {
@@ -28,7 +28,7 @@ const DateRangeCallendar = ({ filter, dispatch }: { filter: Filter; dispatch: Fu
                 />
             </div>
             <div className="filter-input-container">
-                <FontAwesomeIcon icon={faCalendar} className="filter-icon" />
+                {/* <FontAwesomeIcon icon={faCalendar} className="filter-icon" /> */}
                 <DatePicker
                     selected={filter.endDate}
                     onChange={(date) => {

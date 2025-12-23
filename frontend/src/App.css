@@ -158,6 +158,13 @@
     opacity: 0.7;
 }
 
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    scrollbar-color: rgba(100, 108, 255, 0.5) rgba(255, 255, 255, 0.05);
+}
+
 table {
     width: 100%;
     margin: 1.5rem 0;
@@ -166,7 +173,6 @@ table {
     table-layout: fixed;
     background: rgba(255, 255, 255, 0.03);
     border-radius: 12px;
-    /* overflow: hidden; */
 }
 
 th,
@@ -223,6 +229,7 @@ li:last-child {
 }
 
 .header {
+    width: 1000px;
     position: relative;
     display: flex;
     align-items: center;
