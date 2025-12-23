@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import type { Filter } from "../models/Filter.type";
 
-type Action =
+export type Action =
     | { type: "SET_START_DATE"; payload: Date }
     | { type: "SET_END_DATE"; payload: Date }
     | { type: "SET_TITLE"; payload: string }

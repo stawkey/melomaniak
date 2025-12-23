@@ -1,23 +1,34 @@
-import { faEye, faEyeSlash, faGear, faGripVertical } from "@fortawesome/free-solid-svg-icons";
+import {
+    faBrush,
+    faEye,
+    faEyeSlash,
+    faGear,
+    faGripVertical,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import columns from "./Columns";
+import type { VisibilityState } from "@tanstack/react-table";
 
 const columnTuples = columns.map((col) => [(col as any).accessorKey, (col as any).header]);
 
-interface HeaderProps {
+type HeaderProps = {
     columnOrder: string[];
     setColumnOrder: (order: string[]) => void;
-    columnVisibility;
-    setColumnVisibility;
-}
+    columnVisibility: VisibilityState;
+    setColumnVisibility: React.Dispatch<React.SetStateAction<VisibilityState>>;
+    viewMode: string;
+    setViewMode: Dispatch<SetStateAction<"table" | "grid">>;
+};
 
-const Header: React.FC<HeaderProps> = ({
+const Header = ({
     columnOrder,
     setColumnOrder,
     columnVisibility,
     setColumnVisibility,
-}) => {
+    viewMode,
+    setViewMode,
+}: HeaderProps) => {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement | null>(null);
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -56,6 +67,12 @@ const Header: React.FC<HeaderProps> = ({
                 <h1 className="logo">Melomaniak</h1>
             </div>
             <div className="settings-container" ref={ref}>
+                <div
+                    className="view-switcher"
+                    onClick={() => setViewMode(viewMode === "grid" ? "table" : "grid")}
+                >
+                    <FontAwesomeIcon icon={faBrush} size="xl" />
+                </div>
                 <div
                     className="settings-gear"
                     onClick={() => setOpen((o) => !o)}

@@ -1,68 +1,19 @@
-import {
-    flexRender,
-    getCoreRowModel,
-    getPaginationRowModel,
-    useReactTable,
-    type VisibilityState,
-} from "@tanstack/react-table";
-import useGetData from "../hooks/useGetData";
+import { flexRender, type Table } from "@tanstack/react-table";
+import type { Concert } from "../models/Concert.type";
 import DateRangeCallendar from "./DateRangeCallendar";
-import columns from "./Columns";
-import useFiltering from "../hooks/useFiltering";
-import { useState } from "react";
 import FilterInput from "./FilterInput";
-import Header from "./Header";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import type { Filter } from "../models/Filter.type";
+import type { Action } from "../hooks/useFiltering";
 
-function Table() {
-    const { filter, dispatch } = useFiltering();
-    const [columnOrder, setColumnOrder] = useState<string[]>(
-        columns.map((col) => (col as any).accessorKey)
-    );
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(() =>
-        columns.reduce((acc, col) => {
-            const key = (col as any).accessorKey as string;
-            acc[key] = ["title", "composers", "venue", "detailsLink"].includes(key) ? false : true;
-            return acc;
-        }, {} as VisibilityState)
-    );
+type Props = {
+    table: Table<Concert>;
+    filter: Filter;
+    dispatch: React.ActionDispatch<[action: Action]>;
+};
 
-    const [pagination, setPagination] = useState({
-        pageIndex: 0,
-        pageSize: 30,
-    });
-
-    const { totalPages, data } = useGetData(filter, pagination.pageIndex + 1);
-
-    const table = useReactTable({
-        data,
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        onPaginationChange: setPagination,
-        onColumnOrderChange: setColumnOrder,
-        columnResizeMode: "onChange",
-        manualPagination: true,
-        pageCount: totalPages,
-        initialState: {
-            columnVisibility: columnVisibility,
-        },
-        state: {
-            pagination,
-            columnOrder,
-            columnVisibility,
-        },
-    });
-
+const ConcertTableView = ({ table, filter, dispatch }: Props) => {
     return (
         <>
-            <Header
-                columnOrder={columnOrder}
-                setColumnOrder={setColumnOrder}
-                columnVisibility={columnVisibility}
-                setColumnVisibility={setColumnVisibility}
-            />
             <table style={{ width: table.getTotalSize() }}>
                 <thead>
                     {table.getHeaderGroups().map((headerGroup) => (
@@ -120,36 +71,8 @@ function Table() {
                     })}
                 </tbody>
             </table>
-            <button
-                className="pagination-btn"
-                onClick={() => table.firstPage()}
-                disabled={!table.getCanPreviousPage()}
-            >
-                PIERWSZA
-            </button>
-            <button
-                className="pagination-btn"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-            >
-                <FontAwesomeIcon icon={faChevronLeft} />
-            </button>
-            <button
-                className="pagination-btn"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-            >
-                <FontAwesomeIcon icon={faChevronRight} />
-            </button>
-            <button
-                className="pagination-btn"
-                onClick={() => table.lastPage()}
-                disabled={!table.getCanNextPage()}
-            >
-                OSTATNIA
-            </button>
         </>
     );
-}
+};
 
-export default Table;
+export default ConcertTableView;
