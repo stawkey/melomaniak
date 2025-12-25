@@ -1,15 +1,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import type { Action } from "../hooks/useFiltering";
-import type { Filter } from "../models/Filter.type";
-import { faCalendar, faFilter } from "@fortawesome/free-solid-svg-icons";
-import DateRangeCallendar from "./DateRangeCallendar";
+import type { Action } from "../../hooks/useFiltering";
+import type { Filter } from "../../models/Filter.type";
+import { faFilter } from "@fortawesome/free-solid-svg-icons";
+import DateRangeCallendar from "../DateRangePicker/DateRangePicker";
+import styles from "./MasonryFilters.module.css";
 
 type Props = {
     filter: Filter;
     dispatch: React.ActionDispatch<[action: Action]>;
 };
 
-const GridInput = ({
+const FilterInput = ({
     title,
     placeHolder,
     actionType,
@@ -22,13 +23,13 @@ const GridInput = ({
     dispatch: Function;
     defaultValue?: string;
 }) => (
-    <div className="filter-container">
-        <span className="filter-input-title">{title}</span>
-        <div className="filter-input-container grid-filter-item">
-            <FontAwesomeIcon icon={faFilter} className="filter-icon" />
+    <div className={styles.filterContainer}>
+        <span className={styles.filterInputTitle}>{title}</span>
+        <div className={`${styles.filterInputContainer} ${styles.filterItem}`}>
+            <FontAwesomeIcon icon={faFilter} className={styles.filterIcon} />
             <input
                 type="text"
-                className="filter-input"
+                className={styles.filterInput}
                 placeholder={placeHolder}
                 defaultValue={defaultValue}
                 onBlur={(e) => dispatch({ type: actionType, payload: e.target.value })}
@@ -45,37 +46,37 @@ const GridInput = ({
     </div>
 );
 
-const GridFilters = ({ filter, dispatch }: Props) => {
+const MasonryFilters = ({ filter, dispatch }: Props) => {
     return (
-        <div className="grid-filters-container">
-            <div className="filter-container date-range-callendar-container">
-                <span className="filter-input-title">Data</span>
-                <div className="grid-filter-item">
+        <div className={styles.masonryFiltersContainer}>
+            <div className={`${styles.filterContainer} ${styles.dateRangeContainer}`}>
+                <span className={styles.filterInputTitle}>Data</span>
+                <div className={styles.filterItem}>
                     <DateRangeCallendar filter={filter} dispatch={dispatch} />
                 </div>
             </div>
-            <GridInput
+            <FilterInput
                 title="Tytuł"
                 placeHolder="Tytuł"
                 actionType="SET_TITLE"
                 dispatch={dispatch}
                 defaultValue={filter.title}
             />
-            <GridInput
+            <FilterInput
                 title="Program"
                 placeHolder="Program"
                 actionType="SET_PROGRAMMES"
                 dispatch={dispatch}
                 defaultValue={filter.programme}
             />
-            <GridInput
+            <FilterInput
                 title="Typ koncertu"
                 placeHolder="Typ koncertu"
                 actionType="SET_CONCERT_TYPE"
                 dispatch={dispatch}
                 defaultValue={filter.concertType}
             />
-            <GridInput
+            <FilterInput
                 title="Źródło"
                 placeHolder="Źródło"
                 actionType="SET_SOURCE"
@@ -86,4 +87,4 @@ const GridFilters = ({ filter, dispatch }: Props) => {
     );
 };
 
-export default GridFilters;
+export default MasonryFilters;

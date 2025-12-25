@@ -1,10 +1,11 @@
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import type { Concert } from "../models/Concert.type";
+import type { Concert } from "../../models/Concert.type";
 import type { Header } from "@tanstack/react-table";
+import styles from "./TableFilterInput.module.css";
 
-const FilterInput = ({
+const TableFilterInput = ({
     dispatch,
     header,
 }: {
@@ -12,11 +13,11 @@ const FilterInput = ({
     header: Header<Concert, unknown>;
 }) => {
     return (
-        <div className="filter-input-container">
-            <FontAwesomeIcon icon={faFilter} className="filter-icon" />
+        <div className={styles.filterInputContainer}>
+            <FontAwesomeIcon icon={faFilter} className={styles.filterIcon} />
             <input
                 type="text"
-                className="filter-input"
+                className={styles.filterInput}
                 id={`${header.column.columnDef.header}`}
                 name={`${header.column.columnDef.header}`}
                 onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
@@ -48,4 +49,4 @@ const FilterInput = ({
     );
 };
 
-export default FilterInput;
+export default TableFilterInput;

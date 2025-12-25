@@ -1,8 +1,9 @@
 import type { Row } from "@tanstack/react-table";
-import type { Concert } from "../models/Concert.type";
-import type { Filter } from "../models/Filter.type";
-import type { Action } from "../hooks/useFiltering";
-import GridFilters from "./GridFilters";
+import type { Concert } from "../../models/Concert.type";
+import type { Filter } from "../../models/Filter.type";
+import type { Action } from "../../hooks/useFiltering";
+import MasonryFilters from "../MasonryFilters/MasonryFilters";
+import styles from "./MasonryView.module.css";
 
 type Props = {
     rows: Row<Concert>[];
@@ -19,7 +20,7 @@ function convertDate(dateString: string) {
     return `${day}.${month}.${year} ${time}`;
 }
 
-function ConcertGridView({ rows, filter, dispatch }: Props) {
+function MasonryView({ rows, filter, dispatch }: Props) {
     const leftColumn: Row<Concert>[] = [];
     const rightColumn: Row<Concert>[] = [];
 
@@ -47,7 +48,7 @@ function ConcertGridView({ rows, filter, dispatch }: Props) {
         return (
             <div
                 key={row.id}
-                className="concert-card"
+                className={styles.concertCard}
                 style={{ cursor: concert.detailsLink ? "pointer" : "default" }}
                 onClick={() => {
                     if (concert.detailsLink) {
@@ -55,18 +56,18 @@ function ConcertGridView({ rows, filter, dispatch }: Props) {
                     }
                 }}
             >
-                <div className="card-header">
-                    <div className="header-row">
-                        <div className="card-title">{concert.title}</div>
-                        <div className="card-date">{convertDate(String(concert.date))}</div>
+                <div className={styles.cardHeader}>
+                    <div className={styles.headerRow}>
+                        <div className={styles.cardTitle}>{concert.title}</div>
+                        <div className={styles.cardDate}>{convertDate(String(concert.date))}</div>
                     </div>
 
-                    <div className="header-row">
-                        <div className="card-concert-type">{concert.concertType}</div>
-                        <div className="card-source">{concert.source}</div>
+                    <div className={styles.headerRow}>
+                        <div className={styles.cardConcertType}>{concert.concertType}</div>
+                        <div className={styles.cardSource}>{concert.source}</div>
                     </div>
                 </div>
-                <div className="card-body">
+                <div className={styles.cardBody}>
                     <ul>
                         {concert.programmes?.map((piece, idx) => {
                             const pieceVal = piece as any;
@@ -86,13 +87,13 @@ function ConcertGridView({ rows, filter, dispatch }: Props) {
 
     return (
         <>
-            <GridFilters filter={filter} dispatch={dispatch} />
-            <div className="concert-grid">
-                <div className="concert-column">{leftColumn.map(renderCard)}</div>
-                <div className="concert-column">{rightColumn.map(renderCard)}</div>
+            <MasonryFilters filter={filter} dispatch={dispatch} />
+            <div className={styles.concertMasonry}>
+                <div className={styles.concertColumn}>{leftColumn.map(renderCard)}</div>
+                <div className={styles.concertColumn}>{rightColumn.map(renderCard)}</div>
             </div>
         </>
     );
 }
 
-export default ConcertGridView;
+export default MasonryView;

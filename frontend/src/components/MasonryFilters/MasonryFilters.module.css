@@ -1,0 +1,68 @@
+.masonryFiltersContainer {
+    display: flex;
+    gap: 0.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    align-items: center;
+}
+
+.filterContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex: 1;
+    min-width: 0;
+}
+
+.filterItem {
+    flex: 1;
+    min-width: 0;
+}
+
+.dateRangeContainer {
+    min-width: 200px;
+}
+
+.filterInputTitle {
+    margin-bottom: 0.3rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.filterInputContainer {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.filterInputContainer:focus-within {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-color: rgba(100, 108, 255, 0.5);
+    box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.1);
+}
+
+.filterIcon {
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.875rem;
+}
+
+.filterInput {
+    flex: 1;
+    padding: 0.25rem 0;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 0.875rem;
+    outline: none;
+}

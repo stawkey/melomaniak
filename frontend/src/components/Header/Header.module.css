@@ -1,0 +1,99 @@
+.header {
+    width: 1000px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 1rem 0 1rem 0;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+}
+
+.logo {
+    font-family: "Story Script", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    margin: 0;
+    font-size: 4rem;
+    text-align: left;
+}
+
+.settingsContainer {
+    display: flex;
+    position: absolute;
+    right: 0;
+}
+
+.settingsGear,
+.viewSwitcher {
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.settingsGear:hover,
+.viewSwitcher:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #646cff;
+}
+
+.settingsMenu {
+    position: absolute;
+    z-index: 100;
+    right: 0;
+    min-width: 200px;
+    padding: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 8px;
+    background: rgba(26, 26, 26, 0.98);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+}
+
+.menuItem {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    width: 100%;
+    padding: 0.75rem 0.75rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: left;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: grab;
+}
+
+.menuItem:active {
+    cursor: grabbing;
+}
+
+.menuItemDrag {
+    margin-right: 0.75rem;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.menuItem:hover .menuItemDrag {
+    opacity: 0.8;
+}
+
+.menuItemEye {
+    padding: 0.2rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.menuItemEye:hover {
+    color: #646cff;
+}
+
+.menuItemText {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.menuItem:hover {
+    background-color: rgba(100, 108, 255, 0.15);
+}

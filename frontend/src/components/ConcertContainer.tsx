@@ -8,10 +8,10 @@ import useGetData from "../hooks/useGetData";
 import columns from "./Columns";
 import useFiltering from "../hooks/useFiltering";
 import { useState } from "react";
-import Header from "./Header";
-import ConcertGridView from "./ConcertGridView";
-import ConcertTableView from "./ConcertTableView";
-import PaginationControls from "./PaginationControls";
+import Header from "./Header/Header";
+import MasonryView from "./MasonryView/MasonryView";
+import TableView from "./TableView/TableView";
+import PaginationControls from "./PaginationControls/PaginationControls";
 
 function ConcertContainer() {
     const [viewMode, setViewMode] = useState<"table" | "grid">("grid");
@@ -62,13 +62,9 @@ function ConcertContainer() {
                 setViewMode={setViewMode}
             />
             {viewMode === "grid" ? (
-                <ConcertGridView
-                    rows={table.getRowModel().rows}
-                    filter={filter}
-                    dispatch={dispatch}
-                />
+                <MasonryView rows={table.getRowModel().rows} filter={filter} dispatch={dispatch} />
             ) : (
-                <ConcertTableView table={table} filter={filter} dispatch={dispatch} />
+                <TableView table={table} filter={filter} dispatch={dispatch} />
             )}
             <PaginationControls table={table} />
         </>

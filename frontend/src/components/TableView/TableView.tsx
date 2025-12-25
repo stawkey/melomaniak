@@ -1,9 +1,10 @@
 import { flexRender, type Table } from "@tanstack/react-table";
-import type { Concert } from "../models/Concert.type";
-import DateRangeCallendar from "./DateRangeCallendar";
-import FilterInput from "./FilterInput";
-import type { Filter } from "../models/Filter.type";
-import type { Action } from "../hooks/useFiltering";
+import type { Concert } from "../../models/Concert.type";
+import DateRangeCallendar from "../DateRangePicker/DateRangePicker";
+import TableFilterInput from "../TableFilterInput/TableFilterInput";
+import type { Filter } from "../../models/Filter.type";
+import type { Action } from "../../hooks/useFiltering";
+import styles from "./TableView.module.css";
 
 type Props = {
     table: Table<Concert>;
@@ -11,17 +12,17 @@ type Props = {
     dispatch: React.ActionDispatch<[action: Action]>;
 };
 
-const ConcertTableView = ({ table, filter, dispatch }: Props) => {
+const TableView = ({ table, filter, dispatch }: Props) => {
     return (
-        <div className="table-container">
+        <div className={styles.tableContainer}>
             <table style={{ width: table.getTotalSize() }}>
                 <thead>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <tr key={headerGroup.id}>
                             {headerGroup.headers.map((header) => (
                                 <th key={header.id} style={{ width: header.getSize() }}>
-                                    <div className="header-content">
-                                        <div className="header-title">
+                                    <div className={styles.headerContent}>
+                                        <div className={styles.headerTitle}>
                                             {flexRender(
                                                 header.column.columnDef.header,
                                                 header.getContext()
@@ -30,8 +31,10 @@ const ConcertTableView = ({ table, filter, dispatch }: Props) => {
                                         <div
                                             onMouseDown={header.getResizeHandler()}
                                             onTouchStart={header.getResizeHandler()}
-                                            className={`resizer ${
-                                                header.column.getIsResizing() ? "is-resizing" : ""
+                                            className={`${styles.resizer} ${
+                                                header.column.getIsResizing()
+                                                    ? styles.isResizing
+                                                    : ""
                                             }`}
                                         ></div>
                                         {header.column.id === "date" ? (
@@ -40,7 +43,7 @@ const ConcertTableView = ({ table, filter, dispatch }: Props) => {
                                                 dispatch={dispatch}
                                             />
                                         ) : (
-                                            <FilterInput dispatch={dispatch} header={header} />
+                                            <TableFilterInput dispatch={dispatch} header={header} />
                                         )}
                                     </div>
                                 </th>
@@ -75,4 +78,4 @@ const ConcertTableView = ({ table, filter, dispatch }: Props) => {
     );
 };
 
-export default ConcertTableView;
+export default TableView;

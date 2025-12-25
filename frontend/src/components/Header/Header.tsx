@@ -7,8 +7,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
-import columns from "./Columns";
+import columns from "../Columns";
 import type { VisibilityState } from "@tanstack/react-table";
+import styles from "./Header.module.css";
 
 const columnTuples = columns.map((col) => [(col as any).accessorKey, (col as any).header]);
 
@@ -62,14 +63,14 @@ const Header = ({
     };
 
     return (
-        <div className="header">
+        <div className={styles.header}>
             <div>
-                <h1 className="logo">Melomaniak</h1>
+                <h1 className={styles.logo}>Melomaniak</h1>
             </div>
-            <div className="settings-container" ref={ref}>
+            <div className={styles.settingsContainer} ref={ref}>
                 {viewMode === "table" && (
                     <div
-                        className="settings-gear"
+                        className={styles.settingsGear}
                         onClick={() => setOpen((o) => !o)}
                         aria-haspopup="true"
                         aria-expanded={open}
@@ -79,14 +80,14 @@ const Header = ({
                 )}
 
                 {open && (
-                    <div className="settings-menu" role="menu">
+                    <div className={styles.settingsMenu} role="menu">
                         {orderedColumnTuples.map((tuple, index) => {
                             if (!tuple) return null;
                             const [accessorKey, header] = tuple;
                             return (
                                 <div
                                     key={accessorKey}
-                                    className="menu-item"
+                                    className={styles.menuItem}
                                     style={{
                                         cursor: draggedIndex === index ? "grabbing" : "grab",
                                         opacity: draggedIndex === index ? 0.8 : 1,
@@ -98,14 +99,14 @@ const Header = ({
                                     onDragEnd={() => setDraggedIndex(null)}
                                 >
                                     <FontAwesomeIcon
-                                        className="menu-item-drag"
+                                        className={styles.menuItemDrag}
                                         icon={faGripVertical}
                                         size="2xs"
                                     />
-                                    <div className="menu-item-text">{header}</div>
+                                    <div className={styles.menuItemText}>{header}</div>
                                     {columnVisibility[accessorKey] ? (
                                         <FontAwesomeIcon
-                                            className="menu-item-eye"
+                                            className={styles.menuItemEye}
                                             icon={faEye}
                                             onClick={() =>
                                                 setColumnVisibility((prev: any) => ({
@@ -116,7 +117,7 @@ const Header = ({
                                         />
                                     ) : (
                                         <FontAwesomeIcon
-                                            className="menu-item-eye"
+                                            className={styles.menuItemEye}
                                             style={{ opacity: 0.6 }}
                                             icon={faEyeSlash}
                                             onClick={() =>
@@ -133,7 +134,7 @@ const Header = ({
                     </div>
                 )}
                 <div
-                    className="view-switcher"
+                    className={styles.viewSwitcher}
                     onClick={() => setViewMode(viewMode === "grid" ? "table" : "grid")}
                 >
                     <FontAwesomeIcon icon={faBrush} size="xl" />
