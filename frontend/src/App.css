@@ -10,6 +10,21 @@
     width: 100%;
 }
 
+.grid-filters-container {
+    display: flex;
+    gap: 0.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    align-items: center;
+}
+
+.grid-filter-item {
+    flex: 1;
+    min-width: 0;
+}
+
 .concert-grid {
     width: 100%;
     margin: 1.5rem 0;
@@ -341,6 +356,27 @@ li:last-child {
     text-align: left;
 }
 
+.filter-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex: 1;
+    min-width: 0;
+}
+
+.date-range-callendar-container {
+    min-width: 200px;
+}
+
+.filter-input-title {
+    margin-bottom: 0.3rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
 .filter-input-container {
     display: flex;
     align-items: center;
@@ -382,6 +418,7 @@ li:last-child {
 
 .date-picker-input {
     width: 100%;
+    min-width: 70px;
     padding: 0.25rem 0;
     border: none;
     background: transparent;

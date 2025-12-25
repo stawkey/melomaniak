@@ -62,7 +62,11 @@ function ConcertContainer() {
                 setViewMode={setViewMode}
             />
             {viewMode === "grid" ? (
-                <ConcertGridView rows={table.getRowModel().rows} />
+                <ConcertGridView
+                    rows={table.getRowModel().rows}
+                    filter={filter}
+                    dispatch={dispatch}
+                />
             ) : (
                 <ConcertTableView table={table} filter={filter} dispatch={dispatch} />
             )}

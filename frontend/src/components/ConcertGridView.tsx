@@ -1,8 +1,13 @@
 import type { Row } from "@tanstack/react-table";
 import type { Concert } from "../models/Concert.type";
+import type { Filter } from "../models/Filter.type";
+import type { Action } from "../hooks/useFiltering";
+import GridFilters from "./GridFilters";
 
 type Props = {
     rows: Row<Concert>[];
+    filter: Filter;
+    dispatch: React.ActionDispatch<[action: Action]>;
 };
 
 function convertDate(dateString: string) {
@@ -14,7 +19,7 @@ function convertDate(dateString: string) {
     return `${day}.${month}.${year} ${time}`;
 }
 
-function ConcertGridView({ rows }: Props) {
+function ConcertGridView({ rows, filter, dispatch }: Props) {
     const leftColumn: Row<Concert>[] = [];
     const rightColumn: Row<Concert>[] = [];
 
@@ -80,10 +85,13 @@ function ConcertGridView({ rows }: Props) {
     };
 
     return (
-        <div className="concert-grid">
-            <div className="concert-column">{leftColumn.map(renderCard)}</div>
-            <div className="concert-column">{rightColumn.map(renderCard)}</div>
-        </div>
+        <>
+            <GridFilters filter={filter} dispatch={dispatch} />
+            <div className="concert-grid">
+                <div className="concert-column">{leftColumn.map(renderCard)}</div>
+                <div className="concert-column">{rightColumn.map(renderCard)}</div>
+            </div>
+        </>
     );
 }
 
