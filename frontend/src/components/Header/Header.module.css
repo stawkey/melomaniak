@@ -1,11 +1,12 @@
 .header {
-    width: 1000px;
+    width: 100%;
     position: relative;
     display: flex;
     align-items: center;
     padding: 1rem 0 1rem 0;
     border-bottom: 2px solid rgba(255, 255, 255, 0.1);
     margin-bottom: 2rem;
+    user-select: none;
 }
 
 .logo {
@@ -96,4 +97,19 @@
 
 .menuItem:hover {
     background-color: rgba(100, 108, 255, 0.15);
+}
+
+@media (max-width: 780px) {
+    .settingsGear,
+    .viewSwitcher {
+        display: none;
+    }
+
+    .logo {
+        font-size: 3rem;
+    }
+
+    .header {
+        justify-content: center;
+    }
 }

@@ -1,5 +1,3 @@
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import type { Concert } from "../../models/Concert.type";
 import type { Header } from "@tanstack/react-table";
@@ -14,9 +12,10 @@ const TableFilterInput = ({
 }) => {
     return (
         <div className={styles.filterInputContainer}>
-            <FontAwesomeIcon icon={faFilter} className={styles.filterIcon} />
+            {/* <FontAwesomeIcon icon={faFilter} className={styles.filterIcon} /> */}
             <input
                 type="text"
+                placeholder={`${header.column.columnDef.header}`}
                 className={styles.filterInput}
                 id={`${header.column.columnDef.header}`}
                 name={`${header.column.columnDef.header}`}

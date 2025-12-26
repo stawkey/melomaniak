@@ -11,8 +11,9 @@ table {
     border-collapse: separate;
     border-spacing: 0;
     table-layout: fixed;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.02);
     border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .headerContent {
@@ -62,7 +63,7 @@ td {
 }
 
 th {
-    border-bottom: 2px solid rgba(100, 108, 255, 0.3);
+    /* border-bottom: 1px solid #646cff; */
     background: rgba(255, 255, 255, 0.05);
     color: rgba(255, 255, 255, 0.9);
     font-size: 0.875rem;
