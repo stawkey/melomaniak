@@ -24,8 +24,7 @@
     right: 0;
 }
 
-.settingsGear,
-.viewSwitcher {
+.headerItem {
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 8px;
@@ -33,8 +32,7 @@
     color: rgba(255, 255, 255, 0.8);
 }
 
-.settingsGear:hover,
-.viewSwitcher:hover {
+.headerItem:hover {
     background-color: rgba(255, 255, 255, 0.1);
     color: #646cff;
 }
@@ -100,8 +98,7 @@
 }
 
 @media (max-width: 780px) {
-    .settingsGear,
-    .viewSwitcher {
+    .headerItem {
         display: none;
     }
 

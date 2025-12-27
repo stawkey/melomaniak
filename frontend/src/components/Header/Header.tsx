@@ -4,9 +4,11 @@ import {
     faEyeSlash,
     faGear,
     faGripVertical,
+    faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
+import { useNavigate } from "react-router-dom";
 import columns from "../Columns";
 import type { VisibilityState } from "@tanstack/react-table";
 import styles from "./Header.module.css";
@@ -30,6 +32,7 @@ const Header = ({
     viewMode,
     setViewMode,
 }: HeaderProps) => {
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement | null>(null);
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -70,7 +73,7 @@ const Header = ({
             <div className={styles.settingsContainer} ref={ref}>
                 {viewMode === "table" && (
                     <div
-                        className={styles.settingsGear}
+                        className={styles.headerItem}
                         onClick={() => setOpen((o) => !o)}
                         aria-haspopup="true"
                         aria-expanded={open}
@@ -134,10 +137,13 @@ const Header = ({
                     </div>
                 )}
                 <div
-                    className={styles.viewSwitcher}
+                    className={styles.headerItem}
                     onClick={() => setViewMode(viewMode === "grid" ? "table" : "grid")}
                 >
                     <FontAwesomeIcon icon={faBrush} size="xl" />
+                </div>
+                <div className={styles.headerItem} onClick={() => navigate("/favorites")}>
+                    <FontAwesomeIcon icon={faHeart} size="xl" />
                 </div>
             </div>
         </div>

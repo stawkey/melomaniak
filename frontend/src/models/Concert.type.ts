@@ -1,4 +1,5 @@
 export type Concert = {
+    id: number;
     date: Date;
     title: string;
     concertType: string;

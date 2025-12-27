@@ -1,0 +1,119 @@
+.concertCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    transition: all 0.2s ease;
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    height: fit-content;
+}
+
+.concertCard:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(100, 108, 255, 0.4);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.likeButton {
+    position: absolute;
+    bottom: 13px;
+    right: 13px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 2;
+    font-size: 1.3em;
+    padding: 0.15rem;
+    transition: transform 0.2s ease;
+}
+.likeButton:active {
+    transform: scale(1.2);
+}
+
+.cardHeader {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.headerRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    gap: 1rem;
+}
+
+.cardTitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.cardDate {
+    font-size: 0.9rem;
+    color: #646cff;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.cardConcertType {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.9);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 50%;
+}
+
+.cardSource {
+    text-align: right;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.cardBody {
+    padding: 1rem;
+    min-height: 50px;
+    flex-grow: 1;
+    transition: background-color 0.2s ease;
+}
+
+.cardBody[style*="pointer"]:hover {
+    background-color: rgba(100, 108, 255, 0.05);
+}
+
+.cardBody ul {
+    margin: 0;
+    padding: 0;
+}
+
+.cardBody li {
+    position: relative;
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.cardBody li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: rgba(255, 255, 255, 0.3);
+}

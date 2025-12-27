@@ -62,7 +62,11 @@ function ConcertContainer() {
                 setViewMode={setViewMode}
             />
             {viewMode === "grid" ? (
-                <MasonryView rows={table.getRowModel().rows} filter={filter} dispatch={dispatch} />
+                <MasonryView
+                    concerts={table.getRowModel().rows.map((row) => row.original)}
+                    filter={filter}
+                    dispatch={dispatch}
+                />
             ) : (
                 <TableView table={table} filter={filter} dispatch={dispatch} />
             )}

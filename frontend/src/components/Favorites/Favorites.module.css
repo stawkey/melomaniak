@@ -1,0 +1,57 @@
+.header {
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 1rem 0 1rem 0;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+    user-select: none;
+}
+
+.logo {
+    font-family: "Story Script", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    margin: 0;
+    font-size: 4rem;
+    text-align: left;
+}
+
+.concertMasonry {
+    width: 100%;
+    margin: 1.5rem 0;
+    display: flex;
+    gap: 1.5rem;
+    user-select: none;
+}
+
+.concertColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    flex: 1;
+    min-width: 0;
+}
+
+a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.noConcerts {
+    width: 100%;
+    text-align: center;
+    font-size: 1.4rem;
+}
+
+@media (max-width: 1050px) {
+    .concertMasonry {
+        flex-direction: column;
+    }
+}
