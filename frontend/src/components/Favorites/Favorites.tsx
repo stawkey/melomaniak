@@ -1,9 +1,10 @@
 import type { Concert } from "../../models/Concert.type";
+import { useFavoriteConcerts } from "../../store";
 import Card from "../common/Card/Card";
 import styles from "./Favorites.module.css";
 
 function Favorites() {
-    const concerts: Concert[] = JSON.parse(localStorage.getItem("likedConcerts") || "[]");
+    const concerts: Concert[] = useFavoriteConcerts((state) => state.concerts);
     const leftColumn: Concert[] = [];
     const rightColumn: Concert[] = [];
 

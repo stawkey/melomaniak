@@ -2,8 +2,7 @@ import type { Concert } from "../../../models/Concert.type";
 import styles from "./Card.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { toggleLike, isLiked } from "../../../utils/likes";
-import { useState } from "react";
+import { useFavoriteConcerts } from "../../../store";
 
 function convertDate(dateString: string) {
     const date = new Date(dateString);
@@ -15,7 +14,8 @@ function convertDate(dateString: string) {
 }
 
 const Card = ({ concert }: { concert: Concert }) => {
-    const [state, setState] = useState(true);
+    const toggleFavorite = useFavoriteConcerts((s) => s.toggleFavorite);
+    const isFavorite = useFavoriteConcerts((s) => s.isFavorite(concert.id));
 
     return (
         <div
@@ -56,14 +56,13 @@ const Card = ({ concert }: { concert: Concert }) => {
                 className={styles.likeButton}
                 onClick={(e) => {
                     e.stopPropagation();
-                    toggleLike(concert);
-                    setState(!state);
+                    toggleFavorite(concert);
                 }}
             >
                 <FontAwesomeIcon
                     icon={faHeart}
                     style={{
-                        color: isLiked(concert) ? "red" : "inherit",
+                        color: isFavorite ? "red" : "inherit",
                         transition: "color 0.2s ease",
                     }}
                 />

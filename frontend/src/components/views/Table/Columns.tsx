@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import type { Concert } from "../models/Concert.type";
+import type { Concert } from "../../../models/Concert.type";
 
 const columns: ColumnDef<Concert>[] = [
     {

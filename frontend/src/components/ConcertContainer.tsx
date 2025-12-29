@@ -5,20 +5,23 @@ import {
     type VisibilityState,
 } from "@tanstack/react-table";
 import useGetData from "../hooks/useGetData";
-import columns from "./Columns";
+import columns from "./views/Table/Columns";
 import useFiltering from "../hooks/useFiltering";
 import { useState } from "react";
 import Header from "./layout/Header/Header";
-import MasonryView from "./pages/Masonry/MasonryView/MasonryView";
-import TableView from "./pages/Table/TableView/TableView";
+import MasonryView from "./views/Masonry/MasonryView/MasonryView";
+import TableView from "./views/Table/TableView/TableView";
 import PaginationControls from "./layout/PaginationControls/PaginationControls";
+import { useConcertList } from "../store";
 
 function ConcertContainer() {
     const [viewMode, setViewMode] = useState<"table" | "grid">("grid");
 
     const { filter, dispatch } = useFiltering();
     const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 30 });
-    const { totalPages, data } = useGetData(filter, pagination.pageIndex + 1);
+    useGetData(filter, pagination.pageIndex + 1);
+    const concerts = useConcertList((state) => state.concerts);
+    const totalPages = useConcertList((state) => state.totalPages);
 
     const [columnOrder, setColumnOrder] = useState<string[]>(
         columns.map((col) => (col as any).accessorKey)
@@ -32,7 +35,7 @@ function ConcertContainer() {
     );
 
     const table = useReactTable({
-        data,
+        data: concerts,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),

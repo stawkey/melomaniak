@@ -1,19 +1,9 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import axios from "axios";
-import type { Concert } from "../models/Concert.type";
 import type { Filter } from "../models/Filter.type";
-
-type PaginatedResponse = {
-    totalPages: number;
-    data: Concert[];
-};
+import { useConcertList } from "../store";
 
 export default function useGetData(filter: Filter, pageNumber: number = 1) {
-    const [data, setData] = useState<PaginatedResponse>({
-        totalPages: 1,
-        data: [],
-    });
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -32,10 +22,8 @@ export default function useGetData(filter: Filter, pageNumber: number = 1) {
                         "Filters.Composers": filter.composer,
                     },
                 });
-                setData({
-                    totalPages: result.data.totalPages || 1,
-                    data: result.data.concerts || [],
-                });
+                useConcertList.getState().setConcerts(result.data.concerts || []);
+                useConcertList.getState().setTotalPages(result.data.totalPages || 1);
             } catch (err) {
                 console.error("Error: ", err);
             }
@@ -43,6 +31,4 @@ export default function useGetData(filter: Filter, pageNumber: number = 1) {
 
         fetchData();
     }, [filter, pageNumber]);
-
-    return data;
 }
