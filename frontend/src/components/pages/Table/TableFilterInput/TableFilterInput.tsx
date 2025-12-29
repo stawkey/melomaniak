@@ -1,5 +1,5 @@
 import React from "react";
-import type { Concert } from "../../models/Concert.type";
+import type { Concert } from "../../../../models/Concert.type";
 import type { Header } from "@tanstack/react-table";
 import styles from "./TableFilterInput.module.css";
 

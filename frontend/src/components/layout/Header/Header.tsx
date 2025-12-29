@@ -9,7 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
-import columns from "../Columns";
+import columns from "../../Columns";
 import type { VisibilityState } from "@tanstack/react-table";
 import styles from "./Header.module.css";
 

@@ -1,9 +1,9 @@
 import { flexRender, type Table } from "@tanstack/react-table";
-import type { Concert } from "../../models/Concert.type";
-import DateRangeCallendar from "../DateRangePicker/DateRangePicker";
+import type { Concert } from "../../../../models/Concert.type";
+import DateRangeCallendar from "../../../common/DateRangePicker/DateRangePicker";
 import TableFilterInput from "../TableFilterInput/TableFilterInput";
-import type { Filter } from "../../models/Filter.type";
-import type { Action } from "../../hooks/useFiltering";
+import type { Filter } from "../../../../models/Filter.type";
+import type { Action } from "../../../../hooks/useFiltering";
 import styles from "./TableView.module.css";
 
 type Props = {

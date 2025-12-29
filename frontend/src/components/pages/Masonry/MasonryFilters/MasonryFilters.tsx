@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import type { Action } from "../../hooks/useFiltering";
-import type { Filter } from "../../models/Filter.type";
-import DateRangeCallendar from "../DateRangePicker/DateRangePicker";
+import type { Action } from "../../../../hooks/useFiltering";
+import type { Filter } from "../../../../models/Filter.type";
+import DateRangeCallendar from "../../../common/DateRangePicker/DateRangePicker";
 import styles from "./MasonryFilters.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown, faFilter } from "@fortawesome/free-solid-svg-icons";
+import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import Modal from "../MasonryFiltersModal/MasonryFiltersModal";
 
 type Props = {

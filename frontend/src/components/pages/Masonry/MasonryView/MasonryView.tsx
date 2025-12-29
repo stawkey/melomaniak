@@ -1,9 +1,9 @@
-import type { Concert } from "../../models/Concert.type";
-import type { Filter } from "../../models/Filter.type";
-import type { Action } from "../../hooks/useFiltering";
+import type { Concert } from "../../../../models/Concert.type";
+import type { Filter } from "../../../../models/Filter.type";
+import type { Action } from "../../../../hooks/useFiltering";
 import MasonryFilters from "../MasonryFilters/MasonryFilters";
 import styles from "./MasonryView.module.css";
-import Card from "../Card/Card";
+import Card from "../../../common/Card/Card";
 
 type Props = {
     concerts: Concert[];

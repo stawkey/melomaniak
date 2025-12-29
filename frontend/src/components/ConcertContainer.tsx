@@ -8,10 +8,10 @@ import useGetData from "../hooks/useGetData";
 import columns from "./Columns";
 import useFiltering from "../hooks/useFiltering";
 import { useState } from "react";
-import Header from "./Header/Header";
-import MasonryView from "./MasonryView/MasonryView";
-import TableView from "./TableView/TableView";
-import PaginationControls from "./PaginationControls/PaginationControls";
+import Header from "./layout/Header/Header";
+import MasonryView from "./pages/Masonry/MasonryView/MasonryView";
+import TableView from "./pages/Table/TableView/TableView";
+import PaginationControls from "./layout/PaginationControls/PaginationControls";
 
 function ConcertContainer() {
     const [viewMode, setViewMode] = useState<"table" | "grid">("grid");

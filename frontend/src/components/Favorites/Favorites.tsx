@@ -1,5 +1,5 @@
 import type { Concert } from "../../models/Concert.type";
-import Card from "../Card/Card";
+import Card from "../common/Card/Card";
 import styles from "./Favorites.module.css";
 
 function Favorites() {

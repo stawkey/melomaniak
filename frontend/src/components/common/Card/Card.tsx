@@ -1,8 +1,8 @@
-import type { Concert } from "../../models/Concert.type";
+import type { Concert } from "../../../models/Concert.type";
 import styles from "./Card.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { toggleLike, isLiked } from "../../utils/likes";
+import { toggleLike, isLiked } from "../../../utils/likes";
 import { useState } from "react";
 
 function convertDate(dateString: string) {

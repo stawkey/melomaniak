@@ -1,6 +1,6 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import type { Filter } from "../../models/Filter.type";
+import type { Filter } from "../../../models/Filter.type";
 import styles from "./DateRangePicker.module.css";
 import { useEffect, useState } from "react";
 
