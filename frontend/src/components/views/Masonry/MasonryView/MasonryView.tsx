@@ -36,18 +36,22 @@ function MasonryView({ concerts, filter, dispatch }: Props) {
     return (
         <>
             <MasonryFilters filter={filter} dispatch={dispatch} />
-            <div className={styles.concertMasonry}>
-                <div className={styles.concertColumn}>
-                    {leftColumn.map((concert) => (
-                        <Card key={concert.id} concert={concert} />
-                    ))}
+            {leftColumn.length ? (
+                <div className={styles.concertMasonry}>
+                    <div className={styles.concertColumn}>
+                        {leftColumn.map((concert) => (
+                            <Card key={concert.id} concert={concert} />
+                        ))}
+                    </div>
+                    <div className={styles.concertColumn}>
+                        {rightColumn.map((concert) => (
+                            <Card key={concert.id} concert={concert} />
+                        ))}
+                    </div>
                 </div>
-                <div className={styles.concertColumn}>
-                    {rightColumn.map((concert) => (
-                        <Card key={concert.id} concert={concert} />
-                    ))}
-                </div>
-            </div>
+            ) : (
+                <div className={styles.notFound}>Nie znaleziono koncertów</div>
+            )}
         </>
     );
 }
