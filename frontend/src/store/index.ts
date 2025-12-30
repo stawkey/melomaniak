@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import type { Concert } from "../models/Concert.type";
 
 type ConcertListState = {
@@ -22,23 +23,22 @@ type FavoriteConcertsStore = {
     isFavorite: (id: number) => boolean;
 };
 
-const STORAGE_KEY = "likedConcerts";
-
-const loadFavorites = (): Concert[] => JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-
-const persist = (concerts: Concert[]) =>
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(concerts));
-
-export const useFavoriteConcerts = create<FavoriteConcertsStore>((set, get) => ({
-    concerts: loadFavorites(),
-    setConcerts: (concerts) => set({ concerts }),
-    toggleFavorite: (concert) => {
-        const exists = get().concerts.some((c) => c.id === concert.id);
-        const newList = exists
-            ? get().concerts.filter((c) => c.id !== concert.id)
-            : [...get().concerts, concert];
-        set({ concerts: newList });
-        persist(newList);
-    },
-    isFavorite: (id: number) => get().concerts.some((c) => c.id === id),
-}));
+export const useFavoriteConcerts = create<FavoriteConcertsStore>()(
+    persist(
+        (set, get) => ({
+            concerts: [],
+            setConcerts: (concerts) => set({ concerts }),
+            toggleFavorite: (concert) => {
+                const exists = get().concerts.some((c) => c.id === concert.id);
+                const newList = exists
+                    ? get().concerts.filter((c) => c.id !== concert.id)
+                    : [...get().concerts, concert];
+                set({ concerts: newList });
+            },
+            isFavorite: (id: number) => get().concerts.some((c) => c.id === id),
+        }),
+        {
+            name: "likedConcerts",
+        }
+    )
+);
