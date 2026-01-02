@@ -39,6 +39,8 @@ public class ConcertsController(FilharmoniaContext context) : ControllerBase
         var query = _context.Concerts
             .Include(c => c.Composers)
             .Include(c => c.Programmes)
+            .AsSplitQuery()
+            .AsNoTracking()
             .OrderBy(c => c.Date)
             .AsQueryable();
 
